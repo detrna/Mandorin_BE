@@ -1,0 +1,163 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model badges {
+  id      Int      @id @default(autoincrement())
+  title   String   @db.VarChar(128)
+  date    DateTime @db.Date
+  user_id Int
+  images  images[]
+}
+
+model bookings {
+  id         Int         @id @default(autoincrement())
+  price      Int
+  duration   Int
+  survey     DateTime    @db.Date
+  time       DateTime    @db.Time(0)
+  content    String      @db.Text
+  status     Int
+  project_id Int
+  client_id  Int
+  foreman_id Int
+  created_at DateTime    @db.Date
+  clients    clients     @relation(fields: [client_id], references: [user_id], onDelete: Cascade, map: "fk_booking-client")
+  clients    foreman     @relation(fields: [client_id], references: [user_id], onUpdate: Restrict, map: "fk_booking-client")
+  users      users       @relation(fields: [project_id], references: [id], onDelete: Cascade, map: "fk_booking-project")
+  revisions  revisions[]
+
+  @@index([client_id], map: "fk_booking-foreman")
+  @@index([project_id], map: "fk_booking-project")
+}
+
+model clients {
+  user_id  Int        @id
+  nick     String     @db.VarChar(16)
+  role     String     @default("client") @db.VarChar(16)
+  bookings bookings[]
+  users    users      @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_client-user")
+  projects projects[]
+  reviews  reviews[]
+}
+
+model foreman {
+  user_id    Int        @id
+  nik        String     @db.VarChar(32)
+  field      String     @db.VarChar(512)
+  bio        String?    @db.Text
+  strength   String?    @db.Text
+  experience Int
+  portofolio String     @db.VarChar(64)
+  role       String     @default("foreman") @db.VarChar(16)
+  bookings   bookings[]
+  users      users      @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_foreman-user")
+  projects   projects[]
+  reviews    reviews[]
+}
+
+model images {
+  id         Int      @id @default(autoincrement())
+  url        String   @db.VarChar(64)
+  badge_id   Int
+  report_id  Int
+  review_id  Int
+  project_id Int
+  badges     badges   @relation(fields: [badge_id], references: [id], onDelete: Cascade, map: "fk_image-badge")
+  projects   projects @relation(fields: [project_id], references: [id], onDelete: Cascade, map: "fk_image-project")
+  reports    reports  @relation(fields: [report_id], references: [id], onDelete: Cascade, map: "fk_image-report")
+
+  @@index([badge_id], map: "fk_image-badge")
+  @@index([project_id], map: "fk_image-project")
+  @@index([report_id], map: "fk_image-report")
+}
+
+model jwt {
+  id      Int    @id @default(autoincrement())
+  token   String @db.VarChar(256)
+  version Int    @default(1)
+  user_id Int
+  users   users  @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_jwt-user")
+
+  @@index([user_id], map: "fk_jwt-user")
+}
+
+model projects {
+  id         Int       @id @default(autoincrement())
+  title      String    @db.VarChar(64)
+  content    String    @db.Text
+  price      Int
+  duration   Int
+  contract   Int?
+  status     String    @db.VarChar(16)
+  client_id  Int
+  foreman_id Int?
+  created_at DateTime  @default(now()) @db.Date
+  images     images[]
+  clients    clients   @relation(fields: [client_id], references: [user_id], onDelete: Cascade, map: "fk_project-client")
+  foreman    foreman?  @relation(fields: [foreman_id], references: [user_id], onDelete: Cascade, map: "fk_project-foreman")
+  reports    reports[]
+
+  @@index([client_id], map: "fk_project-client")
+  @@index([foreman_id], map: "fk_project-foreman")
+}
+
+model reports {
+  id         Int      @id @default(autoincrement())
+  content    String   @db.Text
+  comment    String?  @db.Text
+  project_id Int
+  images     images[]
+  projects   projects @relation(fields: [project_id], references: [id], onDelete: Cascade, map: "fk_report-project")
+
+  @@index([project_id], map: "fk_report-project")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model reviews {
+  id         Int     @id
+  content    String  @db.VarChar(512)
+  rate       Int
+  client_id  Int
+  foreman_id Int
+  clients    clients @relation(fields: [client_id], references: [user_id], onDelete: Cascade, map: "fk_review-client")
+  foreman    foreman @relation(fields: [foreman_id], references: [user_id], onDelete: Cascade, map: "fk_review-foreman")
+
+  @@index([client_id], map: "fk_review-client")
+  @@index([foreman_id], map: "fk_review-foreman")
+  @@ignore
+}
+
+model revisions {
+  id           Int      @id @default(autoincrement())
+  content      String   @db.Text
+  cause        String   @db.Text
+  new_price    Int
+  new_duration Int
+  booking_id   Int
+  created_at   DateTime @default(now()) @db.Date
+  bookings     bookings @relation(fields: [booking_id], references: [id], onDelete: Cascade, map: "fk_revision-booking")
+
+  @@index([booking_id], map: "fk_revision-booking")
+}
+
+model users {
+  id          Int        @id @default(autoincrement())
+  name        String     @db.VarChar(256)
+  birth_place String     @db.VarChar(64)
+  birth_date  DateTime   @db.Date
+  sex         String     @db.VarChar(16)
+  address     String     @db.VarChar(256)
+  email       String     @db.VarChar(256)
+  password    String     @db.VarChar(256)
+  avatar      String     @db.VarChar(255)
+  bookings    bookings[]
+  clients     clients?
+  foreman     foreman?
+  jwt         jwt[]
+}
