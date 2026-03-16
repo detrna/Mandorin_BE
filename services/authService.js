@@ -1,4 +1,3 @@
-import prisma from "../lib/prisma.js";
 import { supabaseHelper } from "../lib/supabase.js";
 import { clientRepo } from "../repositories/clientRepo.js";
 import { foremanRepo } from "../repositories/foremanRepo.js";
@@ -31,7 +30,8 @@ export const authService = {
     const accessToken = jwtHelper.signAccess(result);
     const refreshToken = jwtHelper.signRefresh(result);
 
-    await jwtRepo.create(result, accessToken);
+    const hashedToken = await hashHelper(refreshToken);
+    await jwtRepo.create(result, hashedToken);
 
     const payload = { result, accessToken, refreshToken };
     return payload;
@@ -71,7 +71,8 @@ export const authService = {
     const accessToken = jwtHelper.signAccess(result);
     const refreshToken = jwtHelper.signRefresh(result);
 
-    await jwtRepo.create(result, accessToken);
+    const hashedToken = await hashHelper(refreshToken);
+    await jwtRepo.create(result, hashedToken);
 
     const payload = { result, accessToken, refreshToken };
     return payload;
@@ -88,6 +89,10 @@ export const authService = {
 
       const accessToken = jwtHelper.signAccess(decoded);
       const newRefreshToken = jwtHelper.signRefresh(decoded);
+
+      const hashedToken = await hashHelper(newRefreshToken);
+      const token = { old: dbToken, new: hashedToken };
+      await jwtRepo.create(decoded, token);
 
       const payload = { accessToken, newRefreshToken };
       return payload;

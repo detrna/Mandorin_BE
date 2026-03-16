@@ -15,4 +15,10 @@ export const jwtRepo = {
         user_id: user.id,
       },
     }),
+
+  rotate: async (user, token) =>
+    await prisma.$transaction([
+      prisma.jwt.delete({ where: { token: token.old } }),
+      prisma.jwt.create({ data: { token: token.new, user_id: user.id } }),
+    ]),
 };
