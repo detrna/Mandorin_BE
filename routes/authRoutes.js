@@ -19,6 +19,6 @@ router.post(
   authController.registerForeman,
 );
 router.post("/refresh", authController.refresh);
-router.post("/login", authController.login);
+router.post("/login", validate(authSchema.login), authController.login);
 
 export default router;

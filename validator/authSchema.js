@@ -26,4 +26,8 @@ export const authSchema = {
     password: Joi.string().min(8).max(50).required(),
     confirm: Joi.any().equal(Joi.ref("password")).required(),
   }),
+  login: Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+  }),
 };
