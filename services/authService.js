@@ -1,9 +1,12 @@
+import prisma from "../lib/prisma.js";
 import { supabaseHelper } from "../lib/supabase.js";
 import { clientRepo } from "../repositories/clientRepo.js";
 import { foremanRepo } from "../repositories/foremanRepo.js";
 import { jwtRepo } from "../repositories/jwtRepo.js";
+import { userRepo } from "../repositories/userRepo.js";
 import { hashHelper } from "../utility/hashHelper.js";
 import { jwtHelper } from "../utility/jwtHelper.js";
+import { throwError } from "../utility/throwError.js";
 
 export const authService = {
   registerClient: async (data, file) => {
@@ -44,11 +47,8 @@ export const authService = {
 
     const experience = Number(data.experience);
 
-    if (!isNaN(experience) && experience < 0) {
-      const err = new Error("Experience must be a valid positive integer");
-      err.code = 400;
-      throw err;
-    }
+    if (!isNaN(experience) && experience < 0)
+      throw throwError(400, "Experience must be a positive integer");
 
     const user = {
       name: data.name,
@@ -78,15 +78,13 @@ export const authService = {
   },
   refresh: async (data) => {
     const refreshToken = data;
-    if (!refreshToken)
-      throw new Error({ code: 401, message: "Refresh token is missing" });
+    if (!refreshToken) throw throwError(401, "Refresh token is missing");
 
     try {
       const decoded = jwtHelper.verifyRefresh(refreshToken);
       const dbToken = jwtRepo.findByUserId(decoded.id);
 
-      if (!dbToken)
-        throw new Error({ code: 401, message: "Session was revoked" });
+      if (!dbToken) throw throwError(401, "Token was revoked");
 
       const accessToken = jwtHelper.signAccess(decoded);
       const newRefreshToken = jwtHelper.signRefresh(decoded);
@@ -96,5 +94,23 @@ export const authService = {
     } catch (err) {
       return err;
     }
+  },
+  login: async (data) => {
+    const user = await userRepo.findByEmail(data.email);
+    if (!user) throw throwError(200, "Incorrect email or password");
+
+    const isMatch = await hashHelper.compare(data.password, user.password);
+    if (isMatch) (200, "Incorrect email or password");
+
+    const tokenPayload = {
+      id: user.id,
+      name: user.name,
+      role: user.role,
+    };
+    const accessToken = jwtHelper.signAccess(tokenPayload);
+    const refreshToken = jwtHelper.signRefresh(tokenPayload);
+
+    const payload = { accessToken, refreshToken };
+    return payload;
   },
 };

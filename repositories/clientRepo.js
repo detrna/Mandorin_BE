@@ -15,4 +15,6 @@ export const clientRepo = {
     }),
   findById: async (data) =>
     await prisma.clients.findUnique({ where: { user_id: data } }),
+  findByEmail: async (data) =>
+    await prisma.clients.findUnique({ where: { email: data } }),
 };

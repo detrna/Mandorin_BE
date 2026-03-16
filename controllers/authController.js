@@ -41,4 +41,16 @@ export const authController = {
       response(res, 500, {}, err.message);
     }
   },
+  login: async (req, res) => {
+    try {
+      const result = await authService.login(req.body);
+      const payload = { accessToken: result.accessToken };
+
+      cookieHelper.sendToken(res, result.refreshToken);
+      response(res, 200, payload, "User logged in successfully");
+    } catch (err) {
+      console.error(err);
+      response(res, err.code || 500, {}, err.message);
+    }
+  },
 };

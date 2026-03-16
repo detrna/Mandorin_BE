@@ -13,4 +13,6 @@ export const foremanRepo = {
     }),
   findById: async (data) =>
     await prisma.foreman.findUnique({ where: { user_id: data } }),
+  findByEmail: async (data) =>
+    await prisma.foreman.findUnique({ where: { email: data } }),
 };

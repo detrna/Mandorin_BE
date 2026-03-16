@@ -153,7 +153,7 @@ model users {
   birth_date  DateTime   @db.Date
   sex         String     @db.VarChar(16)
   address     String     @db.VarChar(256)
-  email       String     @db.VarChar(256)
+  email       String     @db.VarChar(256) @unique
   password    String     @db.VarChar(256)
   avatar      String?    @db.Text
   bookings    bookings[]
