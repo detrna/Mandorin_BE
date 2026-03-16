@@ -3,6 +3,7 @@ import { authController } from "../controllers/authController.js";
 import { uploadHelper } from "../middleware/uploadHelper.js";
 import { validate } from "../middleware/validate.js";
 import { authSchema } from "../validator/authSchema.js";
+import authenticate from "../middleware/authenticate.js";
 
 const router = Router();
 
@@ -18,7 +19,7 @@ router.post(
   validate(authSchema.registerForeman),
   authController.registerForeman,
 );
-router.post("/refresh", authController.refresh);
+router.post("/refresh", authenticate, authController.refresh);
 router.post("/login", validate(authSchema.login), authController.login);
 
 export default router;
