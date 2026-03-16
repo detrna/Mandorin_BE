@@ -1,10 +1,10 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model badges {
@@ -28,11 +28,12 @@ model bookings {
   foreman_id Int
   created_at DateTime    @db.Date
   clients    clients     @relation(fields: [client_id], references: [user_id], onDelete: Cascade, map: "fk_booking-client")
-  clients    foreman     @relation(fields: [client_id], references: [user_id], onUpdate: Restrict, map: "fk_booking-client")
+  foreman    foreman     @relation(fields: [foreman_id], references: [user_id], onUpdate: Restrict, map: "fk_booking-foreman")
   users      users       @relation(fields: [project_id], references: [id], onDelete: Cascade, map: "fk_booking-project")
   revisions  revisions[]
 
-  @@index([client_id], map: "fk_booking-foreman")
+  @@index([client_id], map: "fk_booking-client")
+  @@index([foreman_id], map: "fk_booking-foreman")
   @@index([project_id], map: "fk_booking-project")
 }
 
@@ -42,8 +43,8 @@ model clients {
   role     String     @default("client") @db.VarChar(16)
   bookings bookings[]
   users    users      @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_client-user")
-  projects projects[]
-  reviews  reviews[]
+  projects projects[] @ignore
+  reviews  reviews[] @ignore
 }
 
 model foreman {
@@ -53,12 +54,12 @@ model foreman {
   bio        String?    @db.Text
   strength   String?    @db.Text
   experience Int
-  portofolio String     @db.VarChar(64)
+  portofolio String?    @db.VarChar(64)
   role       String     @default("foreman") @db.VarChar(16)
   bookings   bookings[]
   users      users      @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_foreman-user")
-  projects   projects[]
-  reviews    reviews[]
+  projects   projects[] @ignore
+  reviews    reviews[] @ignore
 }
 
 model images {
@@ -80,7 +81,6 @@ model images {
 model jwt {
   id      Int    @id @default(autoincrement())
   token   String @db.VarChar(256)
-  version Int    @default(1)
   user_id Int
   users   users  @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_jwt-user")
 
@@ -155,7 +155,7 @@ model users {
   address     String     @db.VarChar(256)
   email       String     @db.VarChar(256)
   password    String     @db.VarChar(256)
-  avatar      String     @db.VarChar(255)
+  avatar      String?    @db.Text
   bookings    bookings[]
   clients     clients?
   foreman     foreman?
