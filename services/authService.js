@@ -118,4 +118,8 @@ export const authService = {
     const payload = { accessToken, refreshToken };
     return payload;
   },
+  logout: async (data) => {
+    const result = await jwtRepo.delete(data);
+    return result;
+  },
 };

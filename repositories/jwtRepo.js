@@ -21,4 +21,8 @@ export const jwtRepo = {
       prisma.jwt.delete({ where: { token: token.old } }),
       prisma.jwt.create({ data: { token: token.new, user_id: user.id } }),
     ]),
+
+  delete: async (token) => {
+    await prisma.jwt.delete({ where: { token } });
+  },
 };

@@ -53,4 +53,15 @@ export const authController = {
       response(res, err.code || 500, {}, err.message);
     }
   },
+  logout: async (req, res) => {
+    try {
+      const { refreshToken } = req.cookies;
+      const result = await authService.logout(refreshToken);
+      cookieHelper.clearToken(res, refreshToken);
+      response(res, 200, result, "User logged out successfully");
+    } catch (err) {
+      console.error(err);
+      response(res, err.code || 500, {}, err.message);
+    }
+  },
 };
