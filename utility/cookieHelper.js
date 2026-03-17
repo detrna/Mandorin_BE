@@ -1,6 +1,6 @@
 export const cookieHelper = {
   sendToken: (res, token) => {
-    res.cookie("refresh_token", token, {
+    res.cookie("refreshToken", token, {
       httpOnly: true,
       sameSite: "strict",
       secure: false,
@@ -8,7 +8,7 @@ export const cookieHelper = {
     });
   },
   clearToken: (res, token) => {
-    res.cookie("refresh_token", token, {
+    res.clearCookie("refreshToken", token, {
       httpOnly: true,
       sameSite: "strict",
       secure: false,

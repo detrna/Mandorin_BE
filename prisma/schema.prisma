@@ -79,8 +79,8 @@ model images {
 }
 
 model jwt {
-  id      Int    @id @default(autoincrement())
-  token   String @db.VarChar(256)
+  id        String   @id @default(uuid())
+  token   String @db.VarChar(256) @unique
   user_id Int
   users   users  @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_jwt-user")
 

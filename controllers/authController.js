@@ -1,5 +1,6 @@
 import { authService } from "../services/authService.js";
 import { cookieHelper } from "../utility/cookieHelper.js";
+import { jwtHelper } from "../utility/jwtHelper.js";
 import response from "../utility/response.js";
 
 export const authController = {
@@ -13,7 +14,7 @@ export const authController = {
       response(res, 200, payload, "Client registered successfully");
     } catch (err) {
       console.error(err.message);
-      response(res, err.code || 500, {}, err.message);
+      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
     }
   },
   registerClient: async (req, res) => {
@@ -26,7 +27,7 @@ export const authController = {
       response(res, 200, payload, "Foreman registered successfully");
     } catch (err) {
       console.error(err);
-      response(res, 500, {}, err.message);
+      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
     }
   },
   refresh: async (req, res) => {
@@ -50,18 +51,17 @@ export const authController = {
       response(res, 200, payload, "User logged in successfully");
     } catch (err) {
       console.error(err);
-      response(res, err.code || 500, {}, err.message);
+      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
     }
   },
   logout: async (req, res) => {
     try {
-      const { refreshToken } = req.cookies;
-      const result = await authService.logout(refreshToken);
-      cookieHelper.clearToken(res, refreshToken);
-      response(res, 200, result, "User logged out successfully");
+      const result = await authService.logout(req.cookies);
+      cookieHelper.clearToken(res, result);
+      response(res, 200, {}, "User logged out successfully");
     } catch (err) {
       console.error(err);
-      response(res, err.code || 500, {}, err.message);
+      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
     }
   },
 };

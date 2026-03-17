@@ -9,6 +9,9 @@ import { throwError } from "../utility/throwError.js";
 
 export const authService = {
   registerClient: async (data, file) => {
+    const dbUser = await userRepo.findByEmail(data.email);
+    if (dbUser) throw throwError(409, "Email address was already taken");
+
     const avatarUrl = await supabaseHelper.upload(file, "avatars");
     const hashedPass = await hashHelper.hash(data.password);
 
@@ -27,17 +30,23 @@ export const authService = {
     };
 
     const result = await clientRepo.create(user, client);
-    const accessToken = jwtHelper.signAccess(result);
-    const refreshToken = jwtHelper.signRefresh(result);
 
-    const hashedToken = await hashHelper(refreshToken);
-    await jwtRepo.create(result, hashedToken);
+    const jti = crypto.randomUUID();
+    const accessToken = jwtHelper.signAccess(result);
+    const refreshToken = jwtHelper.signRefresh(result, jti);
+
+    const hashedToken = await hashHelper.hash(refreshToken);
+    const createToken = { value: hashedToken, id: jti };
+    await jwtRepo.create(result, createToken);
 
     const payload = { result, accessToken, refreshToken };
     return payload;
   },
 
   registerForeman: async (data, file) => {
+    const dbUser = await userRepo.findByEmail(data.email);
+    if (dbUser) throw throwError(409, "Email address was already taken");
+
     const avatarUrl = await supabaseHelper.upload(file.avatar[0], "avatars");
     const portofolioUrl = await supabaseHelper.upload(
       file.portfolio[0],
@@ -72,7 +81,9 @@ export const authService = {
     const refreshToken = jwtHelper.signRefresh(result);
 
     const hashedToken = await hashHelper(refreshToken);
-    await jwtRepo.create(result, hashedToken);
+    const jti = crypto.randomUUID();
+    const createToken = { value: hashedToken, id: jti };
+    await jwtRepo.create(result, createToken);
 
     const payload = { result, accessToken, refreshToken };
     return payload;
@@ -83,15 +94,16 @@ export const authService = {
 
     try {
       const decoded = jwtHelper.verifyRefresh(refreshToken);
-      const dbToken = jwtRepo.findByUserId(decoded.id);
+      const dbToken = jwtRepo.findById(decoded.jti);
 
       if (!dbToken) throw throwError(401, "Token was revoked");
 
+      const jti = crypto.randomUUID();
       const accessToken = jwtHelper.signAccess(decoded);
-      const newRefreshToken = jwtHelper.signRefresh(decoded);
+      const newRefreshToken = jwtHelper.signRefresh(decoded, jti);
 
       const hashedToken = await hashHelper(newRefreshToken);
-      const token = { old: dbToken, new: hashedToken };
+      const token = { old: dbToken.id, new: { id: jti, value: hashedToken } };
       await jwtRepo.create(decoded, token);
 
       const payload = { accessToken, newRefreshToken };
@@ -101,25 +113,28 @@ export const authService = {
     }
   },
   login: async (data) => {
-    const user = await userRepo.findByEmail(data.email);
-    if (!user) throw throwError(200, "Incorrect email or password");
+    const result = await userRepo.findByEmail(data.email);
+    if (!result) throw throwError(200, "Incorrect email or password");
 
-    const isMatch = await hashHelper.compare(data.password, user.password);
+    const isMatch = await hashHelper.compare(data.password, result.password);
     if (isMatch) (200, "Incorrect email or password");
 
-    const tokenPayload = {
-      id: user.id,
-      name: user.name,
-      role: user.role,
-    };
-    const accessToken = jwtHelper.signAccess(tokenPayload);
-    const refreshToken = jwtHelper.signRefresh(tokenPayload);
+    const jti = crypto.randomUUID();
+    const accessToken = jwtHelper.signAccess(result);
+    const refreshToken = jwtHelper.signRefresh(result, jti);
+
+    const hashedToken = await hashHelper.hash(refreshToken);
+    const createToken = { value: hashedToken, id: jti };
+    await jwtRepo.create(result, createToken);
 
     const payload = { accessToken, refreshToken };
     return payload;
   },
   logout: async (data) => {
-    const result = await jwtRepo.delete(data);
-    return result;
+    const { refreshToken } = data;
+    const decoded = jwtHelper.verifyRefresh(refreshToken);
+    const jti = decoded.jti;
+    await jwtRepo.delete(jti);
+    return refreshToken;
   },
 };
