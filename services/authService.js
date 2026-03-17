@@ -80,7 +80,7 @@ export const authService = {
     const accessToken = jwtHelper.signAccess(result);
     const refreshToken = jwtHelper.signRefresh(result);
 
-    const hashedToken = await hashHelper(refreshToken);
+    const hashedToken = await hashHelper.hash(refreshToken);
     const jti = crypto.randomUUID();
     const createToken = { value: hashedToken, id: jti };
     await jwtRepo.create(result, createToken);
@@ -132,6 +132,7 @@ export const authService = {
   },
   logout: async (data) => {
     const { refreshToken } = data;
+    return refreshToken;
     const decoded = jwtHelper.verifyRefresh(refreshToken);
     const jti = decoded.jti;
     await jwtRepo.delete(jti);

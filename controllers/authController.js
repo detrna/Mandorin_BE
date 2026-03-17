@@ -7,13 +7,12 @@ export const authController = {
   registerForeman: async (req, res) => {
     try {
       const result = await authService.registerForeman(req.body, req.files);
-
       cookieHelper.sendToken(res, result.refreshToken);
 
       const payload = { data: result.result, accessToken: result.accessToken };
-      response(res, 200, payload, "Client registered successfully");
+      response(res, 200, payload, "Foreman registered successfully");
     } catch (err) {
-      console.error(err.message);
+      console.error(err);
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
     }
   },
@@ -24,7 +23,7 @@ export const authController = {
       cookieHelper.sendToken(res, result.refreshToken);
 
       const payload = { data: result.result, accessToken: result.accessToken };
-      response(res, 200, payload, "Foreman registered successfully");
+      response(res, 200, payload, "Client registered successfully");
     } catch (err) {
       console.error(err);
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
