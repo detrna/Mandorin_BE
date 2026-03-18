@@ -7,12 +7,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model badges {
-  id      Int      @id @default(autoincrement())
-  title   String   @db.VarChar(128)
-  date    DateTime @db.Date
-  user_id Int
-  images  images[]
+model appointments {
+  id         Int      @id @default(autoincrement())
+  date       DateTime @db.Date
+  time       String   @db.VarChar(64)
+  comment    String   @db.Text
+  status     String   @db.VarChar(32)
+  client_id  Int
+  foreman_id Int
+  clients    clients  @relation(fields: [client_id], references: [user_id], onDelete: Cascade, map: "fk_appointment-client")
+  foreman    foreman  @relation(fields: [foreman_id], references: [user_id], onUpdate: Restrict, map: "fk_appointment-foreman")
+
+  @@index([client_id], map: "fk_appointment-client")
+  @@index([foreman_id], map: "fk_appointment-foreman")
 }
 
 model bookings {
@@ -38,49 +45,48 @@ model bookings {
 }
 
 model clients {
-  user_id  Int        @id
-  nick     String     @db.VarChar(16)
-  role     String     @default("client") @db.VarChar(16)
-  bookings bookings[]
-  users    users      @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_client-user")
-  projects projects[] @ignore
-  reviews  reviews[] @ignore
+  user_id      Int            @id
+  nick         String         @db.VarChar(16)
+  role         String         @default("client") @db.VarChar(16)
+  appointments appointments[]
+  bookings     bookings[]
+  users        users          @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_client-user")
+  projects     projects[]
+  reviews      reviews[]
 }
 
 model foreman {
-  user_id    Int        @id
-  nik        String     @db.VarChar(32)
-  field      String     @db.VarChar(512)
-  bio        String?    @db.Text
-  strength   String?    @db.Text
-  experience Int
-  portfolio String?    @db.VarChar(64)
-  role       String     @default("foreman") @db.VarChar(16)
-  bookings   bookings[]
-  users      users      @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_foreman-user")
-  projects   projects[] @ignore
-  reviews    reviews[] @ignore
+  user_id      Int            @id
+  nik          String         @db.VarChar(32)
+  field        String         @db.VarChar(512)
+  bio          String?        @db.Text
+  strength     String?        @db.Text
+  experience   Int
+  portfolio    String?        @db.VarChar(64)
+  role         String         @default("foreman") @db.VarChar(16)
+  appointments appointments[]
+  bookings     bookings[]
+  users        users          @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_foreman-user")
+  projects     projects[]
+  reviews      reviews[]
 }
 
 model images {
   id         Int      @id @default(autoincrement())
   url        String   @db.VarChar(64)
-  badge_id   Int
   report_id  Int
   review_id  Int
   project_id Int
-  badges     badges   @relation(fields: [badge_id], references: [id], onDelete: Cascade, map: "fk_image-badge")
   projects   projects @relation(fields: [project_id], references: [id], onDelete: Cascade, map: "fk_image-project")
   reports    reports  @relation(fields: [report_id], references: [id], onDelete: Cascade, map: "fk_image-report")
 
-  @@index([badge_id], map: "fk_image-badge")
   @@index([project_id], map: "fk_image-project")
   @@index([report_id], map: "fk_image-report")
 }
 
 model jwt {
-  id        String   @id @default(uuid())
-  token   String @db.VarChar(256) @unique
+  id      String @id
+  token   String @unique @db.VarChar(256)
   user_id Int
   users   users  @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_jwt-user")
 
@@ -118,19 +124,18 @@ model reports {
   @@index([project_id], map: "fk_report-project")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model reviews {
-  id         Int     @id
+  id         Int     @id @default(autoincrement())
   content    String  @db.VarChar(512)
-  rate       Int
+  score      Int
   client_id  Int
   foreman_id Int
+  photo      String  @db.Text
   clients    clients @relation(fields: [client_id], references: [user_id], onDelete: Cascade, map: "fk_review-client")
   foreman    foreman @relation(fields: [foreman_id], references: [user_id], onDelete: Cascade, map: "fk_review-foreman")
 
   @@index([client_id], map: "fk_review-client")
   @@index([foreman_id], map: "fk_review-foreman")
-  @@ignore
 }
 
 model revisions {
@@ -153,7 +158,7 @@ model users {
   birth_date  DateTime   @db.Date
   sex         String     @db.VarChar(16)
   address     String     @db.VarChar(256)
-  email       String     @db.VarChar(256) @unique
+  email       String     @unique @db.VarChar(256)
   password    String     @db.VarChar(256)
   avatar      String?    @db.Text
   bookings    bookings[]

@@ -17,11 +17,13 @@ const prefix = "/api";
 import authRoutes from "./routes/authRoutes.js";
 import clientRoutes from "./routes/clientRoutes.js";
 import foremanRoutes from "./routes/foremanRoutes.js";
+import reviewRoutes from "./routes/reviewRoutes.js";
 import { jwtHelper } from "./utility/jwtHelper.js";
 
 app.use(`${prefix}/auth`, authRoutes);
 app.use(`${prefix}/clients`, clientRoutes);
 app.use(`${prefix}/foreman`, foremanRoutes);
+app.use(`${prefix}/reviews`, reviewRoutes);
 app.get("/cookie", (req, res) => {
   const refresh = req.cookies.refreshToken;
   const decoded = jwtHelper.verifyRefresh(refresh);
