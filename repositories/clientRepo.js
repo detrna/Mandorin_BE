@@ -19,19 +19,18 @@ export const clientRepo = {
       include: { users: { omit: { password: true } } },
     }),
   findAll: async (query, pagination) =>
-    await prisma.foreman.findMany({
+    await prisma.users.findMany({
       take: pagination.limit,
       skip: pagination.offset,
+      omit: { password: true },
       where: {
-        users: {
-          name: {
-            contains: query,
-          },
+        name: {
+          contains: query,
         },
       },
       include: {
-        users: {
-          omit: { password: true },
+        clients: {
+          omit: { user_id: true },
         },
       },
     }),

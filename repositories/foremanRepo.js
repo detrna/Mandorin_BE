@@ -18,11 +18,11 @@ export const foremanRepo = {
     }),
   findAll: async (pagination) => {
     const [data, count] = await prisma.$transaction([
-      prisma.foreman.findMany({
+      prisma.users.findMany({
         take: pagination.limit,
         skip: pagination.offset,
-        omit: { user_id: true },
-        include: { users: { omit: { password: true } } },
+        omit: { password: true },
+        include: { foreman: { omit: { user_id: true } } },
       }),
       prisma.foreman.count(),
     ]);
@@ -47,19 +47,18 @@ export const foremanRepo = {
     }),
   findByName: async (query, pagination) => {
     const [data, count] = await prisma.$transaction([
-      prisma.foreman.findMany({
+      prisma.users.findMany({
         take: pagination.limit,
         skip: pagination.offset,
+        omit: { password: true },
         where: {
-          users: {
-            name: {
-              contains: query,
-            },
+          name: {
+            contains: query,
           },
         },
         include: {
-          users: {
-            omit: { password: true },
+          foreman: {
+            omit: { user_id: true },
           },
         },
       }),
