@@ -5,11 +5,17 @@ import { throwError } from "../utility/throwError.js";
 export const foremanService = {
   findOne: async (data) => {
     const result = await foremanRepo.findById(Number(data.id));
-    if (!result) throw throwError(404, "The requested account did not exist");
+    if (!result)
+      throw throwError(404, "Tidak dapat menemukan akun yang diminta");
     return payload;
   },
-  findAll: async () => {
-    const result = await foremanRepo.findAll();
+  findAll: async (data) => {
+    const { name } = data;
+    const result = name
+      ? await foremanRepo.findByName(name)
+      : await foremanRepo.findAll();
+    if (result.length === 0)
+      throw throwError(200, "Tidak menemukan mandor yang cocok");
     return result;
   },
   updateProfile: async (data, file, user) => {

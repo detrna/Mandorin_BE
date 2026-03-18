@@ -38,4 +38,19 @@ export const foremanRepo = {
       include: { foreman: true },
     });
   },
+  findByName: async (query) =>
+    await prisma.foreman.findMany({
+      where: {
+        users: {
+          name: {
+            contains: query,
+          },
+        },
+      },
+      include: {
+        users: {
+          omit: { password: true },
+        },
+      },
+    }),
 };

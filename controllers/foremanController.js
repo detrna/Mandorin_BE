@@ -13,7 +13,7 @@ export const foremanController = {
   },
   findAll: async (req, res) => {
     try {
-      const result = await foremanService.findAll();
+      const result = await foremanService.findAll(req.query);
       response(res, 200, result, "Foreman list retrieved successfully");
     } catch (err) {
       console.log(err);

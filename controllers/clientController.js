@@ -13,7 +13,7 @@ export const clientController = {
   },
   findAll: async (req, res) => {
     try {
-      const result = await clientService.findAll();
+      const result = await clientService.findAll(req.query);
       response(res, 200, result, "Client list retrieved successfully");
     } catch (err) {
       console.log(err);
