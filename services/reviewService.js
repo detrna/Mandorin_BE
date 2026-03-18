@@ -3,14 +3,14 @@ import { reviewRepo } from "../repositories/reviewRepo.js";
 import { throwError } from "../utility/throwError.js";
 
 export const reviewService = {
-  create: async (data, user) => {
-    const imageUrl = await supabaseHelper.upload(file, "images-photo");
+  create: async (data, user, file) => {
+    const imageUrl = await supabaseHelper.upload(file, "images-review");
 
     const review = {
-      score: data.score,
+      score: Number(data.score),
       content: data.content,
       client_id: user.id,
-      foreman_id: foremanId,
+      foreman_id: Number(data.foremanId),
       photo: imageUrl,
     };
 

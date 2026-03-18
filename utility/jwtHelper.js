@@ -3,7 +3,6 @@ import "dotenv/config";
 
 export const jwtHelper = {
   signAccess: (user) => {
-    console.log(user);
     const payload = {
       id: user.id,
       name: user.name,

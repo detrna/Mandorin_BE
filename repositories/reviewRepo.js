@@ -1,7 +1,7 @@
 import prisma from "../lib/prisma.js";
 
 export const reviewRepo = {
-  create: async (data) => await prisma.reviews.create({ data: { data } }),
+  create: async (data) => await prisma.reviews.create({ data }),
   findAll: async (data, pagination) => {
     const [result, count] = await prisma.$transaction([
       prisma.reviews.findMany({

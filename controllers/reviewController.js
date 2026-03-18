@@ -3,11 +3,11 @@ import response from "../utility/response.js";
 
 export const reviewController = {
   create: async (req, res) => {
-    const result = await reviewService(req.body, req.user, req.file);
+    const result = await reviewService.create(req.body, req.user, req.file);
     response(res, 200, result, "Review created successfully");
   },
   findAll: async (req, res) => {
-    const result = await reviewService(req.body, req.pagination);
+    const result = await reviewService.findAll(req.body, req.pagination);
     response(
       res,
       200,
