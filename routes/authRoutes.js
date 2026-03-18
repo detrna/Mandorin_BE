@@ -19,7 +19,7 @@ router.post(
   validate(authSchema.registerForeman),
   authController.registerForeman,
 );
-router.post("/refresh", authenticate, authController.refresh);
+router.post("/refresh", authController.refresh);
 router.post("/login", validate(authSchema.login), authController.login);
 router.delete("/logout", authenticate, authController.logout);
 

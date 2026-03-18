@@ -3,6 +3,7 @@ export const cookieHelper = {
     res.cookie("refreshToken", token, {
       httpOnly: true,
       sameSite: "strict",
+      path: "/",
       secure: false,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -11,6 +12,7 @@ export const cookieHelper = {
     res.clearCookie("refreshToken", token, {
       httpOnly: true,
       sameSite: "strict",
+      path: "/",
       secure: false,
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });

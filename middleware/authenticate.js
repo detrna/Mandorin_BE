@@ -12,6 +12,6 @@ export default function authenticate(req, res, next) {
     req.user = decoded;
     next();
   } catch (err) {
-    return response(res, 403, {}, "Access token was invalid");
+    return response(res, 401, {}, "Access token was invalid");
   }
 }

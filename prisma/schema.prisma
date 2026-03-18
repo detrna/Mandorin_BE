@@ -54,7 +54,7 @@ model foreman {
   bio        String?    @db.Text
   strength   String?    @db.Text
   experience Int
-  portofolio String?    @db.VarChar(64)
+  portfolio String?    @db.VarChar(64)
   role       String     @default("foreman") @db.VarChar(16)
   bookings   bookings[]
   users      users      @relation(fields: [user_id], references: [id], onDelete: Cascade, map: "fk_foreman-user")

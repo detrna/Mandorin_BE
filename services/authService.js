@@ -1,3 +1,4 @@
+import { decode } from "node:punycode";
 import { supabaseHelper } from "../lib/supabase.js";
 import { clientRepo } from "../repositories/clientRepo.js";
 import { foremanRepo } from "../repositories/foremanRepo.js";
@@ -48,7 +49,7 @@ export const authService = {
     if (dbUser) throw throwError(409, "Email address was already taken");
 
     const avatarUrl = await supabaseHelper.upload(file.avatar[0], "avatars");
-    const portofolioUrl = await supabaseHelper.upload(
+    const portfolioUrl = await supabaseHelper.upload(
       file.portfolio[0],
       "portfolios",
     );
@@ -73,7 +74,7 @@ export const authService = {
       nik: data.nik,
       field: data.field,
       experience,
-      portofolio: portofolioUrl || null,
+      portfolio: portfolioUrl || null,
     };
 
     const result = await foremanRepo.create(user, foreman);
@@ -89,26 +90,28 @@ export const authService = {
     return payload;
   },
   refresh: async (data) => {
-    const refreshToken = data;
+    const refreshToken = data.refreshToken;
     if (!refreshToken) throw throwError(401, "Refresh token is missing");
+    if (refreshToken === "undefined")
+      throw throwError(401, "Refresh token is missing");
 
     try {
       const decoded = jwtHelper.verifyRefresh(refreshToken);
-      const dbToken = jwtRepo.findById(decoded.jti);
+      const dbToken = await jwtRepo.findById(decoded.jti);
 
       if (!dbToken) throw throwError(401, "Token was revoked");
 
       const jti = crypto.randomUUID();
       const accessToken = jwtHelper.signAccess(decoded);
       const newRefreshToken = jwtHelper.signRefresh(decoded, jti);
+      const hashedToken = await hashHelper.hash(newRefreshToken);
 
-      const hashedToken = await hashHelper(newRefreshToken);
-      const token = { old: dbToken.id, new: { id: jti, value: hashedToken } };
-      await jwtRepo.create(decoded, token);
+      await jwtRepo.rotate(decoded, dbToken, hashedToken, jti);
 
-      const payload = { accessToken, newRefreshToken };
+      const payload = { accessToken, refreshToken: newRefreshToken };
       return payload;
     } catch (err) {
+      console.log(err);
       return err;
     }
   },
@@ -132,7 +135,6 @@ export const authService = {
   },
   logout: async (data) => {
     const { refreshToken } = data;
-    return refreshToken;
     const decoded = jwtHelper.verifyRefresh(refreshToken);
     const jti = decoded.jti;
     await jwtRepo.delete(jti);

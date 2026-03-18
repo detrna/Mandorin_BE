@@ -1,6 +1,5 @@
 import { authService } from "../services/authService.js";
 import { cookieHelper } from "../utility/cookieHelper.js";
-import { jwtHelper } from "../utility/jwtHelper.js";
 import response from "../utility/response.js";
 
 export const authController = {
@@ -31,14 +30,15 @@ export const authController = {
   },
   refresh: async (req, res) => {
     try {
-      const result = await authService.refresh(req.cookie);
-      const payload = result.accessToken;
+      const result = await authService.refresh(req.cookies);
+      const accessToken = result.accessToken;
+      const payload = { accessToken };
 
-      cookieHelper.sendToken(result.refreshToken);
+      cookieHelper.sendToken(res, result.refreshToken);
       response(res, 200, payload, "Token refreshed successfully");
     } catch (err) {
       console.log(err);
-      response(res, 500, {}, err.message);
+      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
     }
   },
   login: async (req, res) => {

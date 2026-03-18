@@ -11,6 +11,7 @@ export const jwtHelper = {
     return jwt.sign(payload, process.env.JWT_ACCESS_KEY, { expiresIn: "5m" });
   },
   signRefresh: (user, jti) => {
+    console.log(jti);
     const payload = {
       jti,
       id: user.id,
