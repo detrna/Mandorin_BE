@@ -16,15 +16,23 @@ export const foremanRepo = {
       where: { user_id: id },
       include: { users: { omit: { password: true } } },
     }),
-  findAll: async () =>
-    await prisma.foreman.findMany({
-      omit: { user_id: true },
-      include: { users: { omit: { password: true } } },
-    }),
+  findAll: async (pagination) => {
+    const [data, count] = await prisma.$transaction([
+      prisma.foreman.findMany({
+        take: pagination.limit,
+        skip: pagination.offset,
+        omit: { user_id: true },
+        include: { users: { omit: { password: true } } },
+      }),
+      prisma.foreman.count(),
+    ]);
+    return { data, count };
+  },
+
   findByEmail: async (data) =>
     await prisma.foreman.findUnique({ where: { email: data } }),
-  updateData: async (userData, foremanData, id) => {
-    return await prisma.users.update({
+  updateData: async (userData, foremanData, id) =>
+    await prisma.users.update({
       where: { id: id },
       data: {
         ...userData,
@@ -36,21 +44,29 @@ export const foremanRepo = {
         },
       },
       include: { foreman: true },
-    });
-  },
-  findByName: async (query) =>
-    await prisma.foreman.findMany({
-      where: {
-        users: {
-          name: {
-            contains: query,
+    }),
+  findByName: async (query, pagination) => {
+    const [data, count] = await prisma.$transaction([
+      prisma.foreman.findMany({
+        take: pagination.limit,
+        skip: pagination.offset,
+        where: {
+          users: {
+            name: {
+              contains: query,
+            },
           },
         },
-      },
-      include: {
-        users: {
-          omit: { password: true },
+        include: {
+          users: {
+            omit: { password: true },
+          },
         },
-      },
-    }),
+      }),
+      prisma.foreman.count({
+        where: { users: { name: { contains: query } } },
+      }),
+    ]);
+    return { data, count };
+  },
 };

@@ -9,14 +9,20 @@ export const foremanService = {
       throw throwError(404, "Tidak dapat menemukan akun yang diminta");
     return payload;
   },
-  findAll: async (data) => {
+  findAll: async (data, pagination) => {
     const { name } = data;
+    let paging = pagination;
     const result = name
-      ? await foremanRepo.findByName(name)
-      : await foremanRepo.findAll();
+      ? await foremanRepo.findByName(name, paging)
+      : await foremanRepo.findAll(paging);
     if (result.length === 0)
       throw throwError(200, "Tidak menemukan mandor yang cocok");
-    return result;
+
+    paging = { ...paging, totalItems: result.count };
+    delete result.count;
+
+    const payload = { data: result, paging };
+    return payload;
   },
   updateProfile: async (data, file, user) => {
     const avatarUrl = file.avatar[0]

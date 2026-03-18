@@ -18,10 +18,22 @@ export const clientRepo = {
       where: { user_id: data },
       include: { users: { omit: { password: true } } },
     }),
-  findAll: async () =>
-    await prisma.clients.findMany({
-      omit: { user_id: true },
-      include: { users: { omit: { password: true } } },
+  findAll: async (query, pagination) =>
+    await prisma.foreman.findMany({
+      take: pagination.limit,
+      skip: pagination.offset,
+      where: {
+        users: {
+          name: {
+            contains: query,
+          },
+        },
+      },
+      include: {
+        users: {
+          omit: { password: true },
+        },
+      },
     }),
   findByEmail: async (data) =>
     await prisma.clients.findUnique({ where: { email: data } }),

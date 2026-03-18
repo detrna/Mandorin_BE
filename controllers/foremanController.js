@@ -13,8 +13,14 @@ export const foremanController = {
   },
   findAll: async (req, res) => {
     try {
-      const result = await foremanService.findAll(req.query);
-      response(res, 200, result, "Foreman list retrieved successfully");
+      const result = await foremanService.findAll(req.query, req.pagination);
+      response(
+        res,
+        200,
+        result.data,
+        "Foreman list retrieved successfully",
+        result.paging,
+      );
     } catch (err) {
       console.log(err);
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
