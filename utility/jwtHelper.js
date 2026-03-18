@@ -6,7 +6,7 @@ export const jwtHelper = {
     const payload = {
       id: user.id,
       name: user.name,
-      role: user.clients.role || user.foreman.role,
+      role: user.clients.role || user.foreman.role || user.role,
     };
     return jwt.sign(payload, process.env.JWT_ACCESS_KEY, { expiresIn: "5m" });
   },
