@@ -3,10 +3,11 @@ import "dotenv/config";
 
 export const jwtHelper = {
   signAccess: (user) => {
+    console.log(user);
     const payload = {
       id: user.id,
       name: user.name,
-      role: user.role,
+      role: user.clients.role || user.foreman.role,
     };
     return jwt.sign(payload, process.env.JWT_ACCESS_KEY, { expiresIn: "5m" });
   },
@@ -15,7 +16,7 @@ export const jwtHelper = {
       jti,
       id: user.id,
       name: user.name,
-      role: user.role,
+      role: user.clients.role || user.foreman.role,
     };
     return jwt.sign(payload, process.env.JWT_REFRESH_KEY, { expiresIn: "7d" });
   },
