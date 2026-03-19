@@ -15,7 +15,7 @@ export const jwtHelper = {
       jti,
       id: user.id,
       name: user.name,
-      role: user.clients.role || user.foreman.role,
+      role: user.clients?.role || user.foreman?.role || user.role,
     };
     return jwt.sign(payload, process.env.JWT_REFRESH_KEY, { expiresIn: "7d" });
   },
