@@ -5,9 +5,9 @@ import { paginate } from "../middleware/paginate.js";
 
 const router = Router();
 
-router.get("/", authenticate, paginate, appointmentController.findAll);
+router.get("/", authenticate, paginate(), appointmentController.findAll);
 router.get("/:id", authenticate, appointmentController.find);
 router.post("/", authenticate, appointmentController.create);
-router.patch("/", authenticate, appointmentController.update);
+router.patch("/:id", authenticate, appointmentController.update);
 
 export default router;

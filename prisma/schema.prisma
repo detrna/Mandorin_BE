@@ -12,7 +12,7 @@ model appointments {
   location   String   @db.Text
   date       DateTime @db.Date
   time       String   @db.VarChar(64)
-  comment    String   @db.Text
+  note    String   @db.Text
   status     String   @db.VarChar(32)
   client_id  Int
   foreman_id Int
