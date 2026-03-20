@@ -19,8 +19,6 @@ export const jwtRepo = {
     ]);
   },
 
-  delete: async (id) => {
-    await prisma.jwt.delete({ where: { id: id } });
-  },
+  delete: async (id) => await prisma.jwt.delete({ where: { id: id } }),
   findById: async (id) => await prisma.jwt.findUnique({ where: { id: id } }),
 };

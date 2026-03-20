@@ -137,6 +137,7 @@ export const authService = {
     const { refreshToken } = data;
     const decoded = jwtHelper.verifyRefresh(refreshToken);
     const jti = decoded.jti;
+
     await jwtRepo.delete(jti);
     return refreshToken;
   },
