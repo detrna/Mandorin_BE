@@ -9,7 +9,7 @@ export const appointmentController = {
         res,
         200,
         result.data,
-        "List of appointments retrieved successfully",
+        "Daftar janji temu berhasil diambil",
         result.paging,
       );
     } catch (err) {
@@ -20,7 +20,7 @@ export const appointmentController = {
   find: async (req, res) => {
     try {
       const result = await appointmentService.find(req.params);
-      response(res, 200, result, "Appointment retrieved successfully");
+      response(res, 200, result, "Data janji temu berhasil diambil");
     } catch (err) {
       console.log(err);
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
@@ -29,7 +29,7 @@ export const appointmentController = {
   create: async (req, res) => {
     try {
       const result = await appointmentService.create(req.body, req.user);
-      response(res, 200, result, "Appointment created successfully");
+      response(res, 200, result, "Janji temu berhasil dibuat");
     } catch (err) {
       console.log(err);
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
@@ -42,7 +42,7 @@ export const appointmentController = {
         req.user,
         req.params,
       );
-      response(res, 200, result, "Appointment updated successfully");
+      response(res, 200, result, "Janji temu berhasil diperbarui");
     } catch (err) {
       console.log(err);
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);

@@ -9,7 +9,7 @@ export const authController = {
       cookieHelper.sendToken(res, result.refreshToken);
 
       const payload = { data: result.result, accessToken: result.accessToken };
-      response(res, 200, payload, "Foreman registered successfully");
+      response(res, 200, payload, "Mandor berhasil terdaftar");
     } catch (err) {
       console.error(err);
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
@@ -22,7 +22,7 @@ export const authController = {
       cookieHelper.sendToken(res, result.refreshToken);
 
       const payload = { data: result.result, accessToken: result.accessToken };
-      response(res, 200, payload, "Client registered successfully");
+      response(res, 200, payload, "Klien berhasil terdaftar");
     } catch (err) {
       console.error(err);
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
@@ -35,7 +35,7 @@ export const authController = {
       const payload = { accessToken };
 
       cookieHelper.sendToken(res, result.refreshToken);
-      response(res, 200, payload, "Token refreshed successfully");
+      response(res, 200, payload, "Token berhasil di-refresh");
     } catch (err) {
       console.log(err);
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
@@ -47,7 +47,7 @@ export const authController = {
       const payload = { accessToken: result.accessToken };
 
       cookieHelper.sendToken(res, result.refreshToken);
-      response(res, 200, payload, "User logged in successfully");
+      response(res, 200, payload, "Pengguna berhasil login");
     } catch (err) {
       console.error(err);
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
@@ -57,7 +57,7 @@ export const authController = {
     try {
       const result = await authService.logout(req.cookies);
       cookieHelper.clearToken(res, result);
-      response(res, 200, {}, "User logged out successfully");
+      response(res, 200, {}, "Pengguna berhasil logout");
     } catch (err) {
       console.error(err);
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);

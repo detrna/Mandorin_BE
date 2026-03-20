@@ -6,14 +6,14 @@ import { throwError } from "../utility/throwError.js";
 export const appointmentService = {
   create: async (data, user) => {
     if (user.role === "client") {
-      const dbForeman = await foremanRepo.findById(data.foreman_id);
+      const dbForeman = await foremanRepo.findById(data.foremanId);
       if (!dbForeman) throw throwError(400, "Data akun mandor tidak ditemukan");
-      if (dbForeman.foreman.role !== "foreman")
+      if (dbForeman.role !== "foreman")
         throw throwError(400, "Mandor yang dimintakan bukanlah seorang mandor");
     } else {
-      const dbClient = await clientRepo.findById(data.client_id);
+      const dbClient = await clientRepo.findById(data.clientId);
       if (!dbClient) throw throwError(400, "Data akun klien tidak ditemukan");
-      if (dbClient.client.role !== "client")
+      if (dbClient.role !== "client")
         throw throwError(400, "Klien yang dimintakan bukanlah seorang klien");
     }
 
@@ -24,8 +24,8 @@ export const appointmentService = {
       time: data.time,
       note: data.note,
       status: "MENUNGGU PERSUTUJUAN",
-      client_id: data.clientId,
-      foreman_id: data.foremanId,
+      client_id: data.clientId ?? user.id,
+      foreman_id: data.foremanId ?? user.id,
     };
     const result = await appointmentRepo.create(appointment);
     return result;
