@@ -5,7 +5,7 @@ export const clientController = {
   findOne: async (req, res) => {
     try {
       const result = await clientService.findOne(req.params);
-      response(res, 200, result, "Client retrieved successfully");
+      response(res, 200, result, "Data klien berhasil diambil");
     } catch (err) {
       console.log(err);
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
@@ -13,8 +13,14 @@ export const clientController = {
   },
   findAll: async (req, res) => {
     try {
-      const result = await clientService.findAll(req.query);
-      response(res, 200, result, "Client list retrieved successfully");
+      const result = await clientService.findAll(req.query, req.pagination);
+      response(
+        res,
+        200,
+        result.data,
+        "Daftar klien berhasil diambil",
+        result.paging,
+      );
     } catch (err) {
       console.log(err);
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);

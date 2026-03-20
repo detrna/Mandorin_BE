@@ -8,13 +8,19 @@ export const clientService = {
       throw throwError(404, "Tidak dapat menemukan akun yang diminta");
     return result;
   },
-  findAll: async () => {
+  findAll: async (data, pagination) => {
     const { name } = data;
+    let paging = pagination;
     const result = name
-      ? await clientRepo.findByName(name)
-      : await clientRepo.findAll();
+      ? await clientRepo.findByName(name, paging)
+      : await clientRepo.findAll(paging);
     if (result.length === 0)
       throw throwError(200, "Tidak menemukan klien yang cocok");
-    return result;
+
+    paging = { ...paging, totalItems: result.count };
+    delete result.count;
+
+    const payload = { data: result, paging };
+    return payload;
   },
 };

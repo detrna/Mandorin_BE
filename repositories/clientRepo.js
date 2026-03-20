@@ -18,22 +18,41 @@ export const clientRepo = {
       where: { user_id: data },
       include: { users: { omit: { password: true } } },
     }),
-  findAll: async (query, pagination) =>
-    await prisma.users.findMany({
-      take: pagination.limit,
-      skip: pagination.offset,
-      omit: { password: true },
-      where: {
-        name: {
-          contains: query,
-        },
-      },
-      include: {
-        clients: {
-          omit: { user_id: true },
-        },
-      },
-    }),
+  findAll: async (pagination) => {
+    const [data, count] = await prisma.$transaction([
+      prisma.users.findMany({
+        take: pagination.limit,
+        skip: pagination.offset,
+        omit: { password: true },
+        include: { clients: { omit: { user_id: true } } },
+      }),
+      prisma.clients.count(),
+    ]);
+    return { data, count };
+  },
   findByEmail: async (data) =>
     await prisma.clients.findUnique({ where: { email: data } }),
+  findByName: async (query, pagination) => {
+    const [data, count] = await prisma.$transaction([
+      prisma.users.findMany({
+        take: pagination.limit,
+        skip: pagination.offset,
+        omit: { password: true },
+        where: {
+          name: {
+            contains: query,
+          },
+        },
+        include: {
+          clients: {
+            omit: { user_id: true },
+          },
+        },
+      }),
+      prisma.clients.count({
+        where: { users: { name: { contains: query } } },
+      }),
+    ]);
+    return { data, count };
+  },
 };
