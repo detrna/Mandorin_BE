@@ -54,15 +54,16 @@ export const appointmentService = {
     )
       throw throwError(403, "Pengguna tidak memiliki janji temu terkait");
 
-    const date = data.date ? new Date(data.date) : null;
+    const date = data.date ? new Date(data.date) : dbAppointment.date;
     const appointment = {
       id,
-      location: data.location ?? null,
+      location: data.location ?? dbAppointment.location,
       date,
-      time: data.time ?? null,
-      note: data.note ?? null,
-      status: data.status ?? null,
+      time: data.time ?? dbAppointment.time,
+      note: data.note ?? dbAppointment.note,
+      status: data.status ?? dbAppointment.status,
     };
+
     const result = await appointmentRepo.update(appointment);
     return result;
   },
