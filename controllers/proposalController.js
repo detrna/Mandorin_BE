@@ -57,4 +57,16 @@ export const proposalController = {
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
     }
   },
+  pay: async (req, res) => {
+    try {
+      const result = await proposalService.pay(req.user, req.params);
+      response(res, 200, result, "Proposal berhasil diterima");
+    } catch (err) {
+      console.log(err);
+      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+    }
+  },
+  notification: () => {
+    return;
+  },
 };

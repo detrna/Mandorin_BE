@@ -15,6 +15,10 @@ export const proposalRepo = {
   findById: async (id) =>
     await prisma.proposals.findUnique({
       where: { id: id },
+      include: {
+        clients: { include: { users: true } },
+        foreman: { include: { users: true } },
+      },
     }),
   create: async (data) =>
     await prisma.proposals.create({

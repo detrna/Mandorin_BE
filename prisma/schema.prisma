@@ -159,3 +159,13 @@ model users {
   foreman     foreman?
   jwt         jwt[]
 }
+
+model transactions {
+  id          Int     @id @default(autoincrement())
+  amount      Int?
+  status      String? @db.VarChar(128)
+  created_at  Int     @default(dbgenerated("(current_timestamp())"))
+  updated_at  Int?
+  midtrans_id Int?
+  proposal_id Int     @unique
+}

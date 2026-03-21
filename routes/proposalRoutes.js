@@ -3,6 +3,7 @@ import authenticate from "../middleware/authenticate.js";
 import { paginate } from "../middleware/paginate.js";
 import { proposalController } from "../controllers/proposalController.js";
 import { uploadHelper } from "../middleware/uploadHelper.js";
+import { roleGuard } from "../middleware/roleGuard.js";
 
 const router = Router();
 
@@ -16,4 +17,11 @@ router.post(
 );
 router.patch("/:id", authenticate, proposalController.update);
 router.delete("/:id", authenticate, proposalController.delete);
+router.patch(
+  "/:id/pay",
+  authenticate,
+  roleGuard("client"),
+  proposalController.pay,
+);
+
 export default router;

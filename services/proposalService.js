@@ -1,7 +1,9 @@
+import { midtrans } from "../lib/midtrans.js";
 import { supabaseHelper } from "../lib/supabase.js";
 import { clientRepo } from "../repositories/clientRepo.js";
 import { foremanRepo } from "../repositories/foremanRepo.js";
 import { proposalRepo } from "../repositories/proposalRepo.js";
+import { transactionRepo } from "../repositories/transactionRepo.js";
 import { throwError } from "../utility/throwError.js";
 
 export const proposalService = {
@@ -75,5 +77,26 @@ export const proposalService = {
 
     const result = await proposalRepo.delete(params);
     return result;
+  },
+  pay: async (user, params) => {
+    const id = Number(params.id);
+    const dbProposal = await proposalRepo.findById(id);
+    if (!dbProposal)
+      throw throwError(403, "Proposal yang diminta tidak dapat ditemukan");
+    if (dbProposal.client_id !== user.id)
+      throw throwError(403, "Pengguna tidak memiliki proposal terkait");
+
+    let dbTransaction = await transactionRepo.findByItemId(id);
+    if (!dbTransaction)
+      dbTransaction = await transactionRepo.create({ proposal_id: id });
+
+    const response = await midtrans(dbProposal, dbTransaction);
+    return response;
+  },
+  notification: async (data) => {
+    const payment = midtrans.notification(data);
+    console.log(payment);
+    process.exit();
+    return midtrans;
   },
 };
