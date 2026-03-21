@@ -48,4 +48,13 @@ export const appointmentController = {
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
     }
   },
+  delete: async (req, res) => {
+    try {
+      const result = await appointmentController.update(req.user, req.params);
+      response(res, 200, result, "Proposal berhasil dihapus");
+    } catch (err) {
+      console.log(err);
+      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+    }
+  },
 };

@@ -64,4 +64,16 @@ export const proposalService = {
     const result = await proposalRepo.update(proposal);
     return result;
   },
+  delete: async (user, params) => {
+    const dbProposal = await proposalRepo.findById(params);
+    if (!dbProposal)
+      throw throwError(403, "Proposal yang diminta tidak dapat ditemukan");
+    if (
+      !(dbProposal.foreman_id === user.id || dbProposal.client_id === user.id)
+    )
+      throw throwError(403, "Pengguna tidak memiliki proposal terkait");
+
+    const result = await proposalRepo.delete(params);
+    return result;
+  },
 };

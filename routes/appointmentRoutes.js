@@ -9,5 +9,6 @@ router.get("/", authenticate, paginate(), appointmentController.findAll);
 router.get("/:id", authenticate, appointmentController.find);
 router.post("/", authenticate, appointmentController.create);
 router.patch("/:id", authenticate, appointmentController.update);
+router.delete("/:id", authenticate, appointmentController.delete);
 
 export default router;

@@ -27,4 +27,6 @@ export const appointmentRepo = {
       },
       data,
     }),
+  delete: async (data) =>
+    await prisma.appointments.delete({ where: { id: data.id } }),
 };

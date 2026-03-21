@@ -27,4 +27,6 @@ export const proposalRepo = {
       },
       data,
     }),
+  delete: async (data) =>
+    await prisma.proposals.delete({ where: { id: data.id } }),
 };

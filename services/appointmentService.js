@@ -67,4 +67,19 @@ export const appointmentService = {
     const result = await appointmentRepo.update(appointment);
     return result;
   },
+  delete: async (user, params) => {
+    const dbAppointment = await appointmentRepo.findById(params);
+    if (!dbAppointment)
+      throw throwError(403, "Janji temu yang diminta tidak dapat ditemukan");
+    if (
+      !(
+        dbAppointment.foreman_id === user.id ||
+        dbAppointment.client_id === user.id
+      )
+    )
+      throw throwError(403, "Pengguna tidak memiliki janji temu terkait");
+
+    const result = await appointmentRepo.delete(params);
+    return result;
+  },
 };

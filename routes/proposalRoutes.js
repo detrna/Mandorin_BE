@@ -15,5 +15,5 @@ router.post(
   proposalController.create,
 );
 router.patch("/:id", authenticate, proposalController.update);
-
+router.delete("/:id", authenticate, proposalController.delete);
 export default router;
