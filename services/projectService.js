@@ -9,9 +9,10 @@ export const projectService = {
       throw throwError(400, "Proposal dari project tidak dapat ditemukan");
 
     const project = {
+      field: dbProposal.field,
       title: dbProposal.title,
       content: dbProposal.content,
-      budget: dbProposal.budget,
+      budget: Number(dbProposal.budget),
       deadline: dbProposal.deadline,
       location: dbProposal.location,
       status: "SEDANG BERJALAN",
@@ -28,8 +29,8 @@ export const projectService = {
 
     return result;
   },
-  findAll: async (user) => {
-    const result = await projectRepo.findAllByUID(user.id);
+  findAll: async (query) => {
+    const result = await projectRepo.findAllByUID(Number(query.userId));
     return result;
   },
 };

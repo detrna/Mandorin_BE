@@ -22,7 +22,7 @@ export const projectController = {
   },
   findAll: async (req, res) => {
     try {
-      const result = await projectService.findAll(req.user);
+      const result = await projectService.findAll(req.query);
       response(res, 200, result, "Project berhasil diambil");
     } catch (err) {
       console.log(err);

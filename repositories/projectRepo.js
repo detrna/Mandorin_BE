@@ -8,8 +8,6 @@ export const projectRepo = {
         where: { OR: [{ client_id: id }, { foreman_id: id }] },
         include: {
           clients: { include: { users: { omit: { password: true } } } },
-        },
-        include: {
           foreman: { include: { users: { omit: { password: true } } } },
         },
       }),

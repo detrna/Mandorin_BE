@@ -60,7 +60,7 @@ export const proposalController = {
   pay: async (req, res) => {
     try {
       const result = await proposalService.pay(req.user, req.params);
-      response(res, 200, result, "Proposal berhasil diterima");
+      response(res, 200, result, "Sesi pembayaran berhasil dibuat");
     } catch (err) {
       console.log(err);
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);

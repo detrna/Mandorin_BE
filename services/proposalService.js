@@ -18,10 +18,11 @@ export const proposalService = {
 
     const deadline = new Date(data.deadline);
     const proposal = {
-      price: Number(data.price),
+      budget: Number(data.budget),
       deadline,
       field: data.field,
       title: data.title,
+      location: data.location,
       content: data.content,
       photo: photoUrl,
       status: "MENUNGGU PERSETUJUAN",
@@ -55,10 +56,11 @@ export const proposalService = {
     const deadline = data.date ? new Date(data.deadline) : null;
     const proposal = {
       id,
-      price: data.price ?? dbProposal.price,
+      budget: data.budget ?? dbProposal.budget,
       deadline: deadline ?? dbProposal.deadline,
       field: data.field ?? dbProposal.field,
-      title: data.title ?? dbProposal.titile,
+      title: data.title ?? dbProposal.title,
+      location: data.location ?? dbProposal.location,
       content: data.content ?? dbProposal.content,
       status: data.status ?? dbProposal.status,
     };

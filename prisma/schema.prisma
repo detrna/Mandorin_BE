@@ -74,18 +74,19 @@ model jwt {
 
 model projects {
   id         Int       @id @default(autoincrement())
-  title      String    @db.VarChar(64)
+  field      String    @db.VarChar(128)
+  title      String    @db.VarChar(128)
   content    String    @db.Text
   budget     Int
-  deadline   String    @db.VarChar(64)
-  location   String?   @db.Text
+  deadline   DateTime  @db.Date
+  location   String    @db.Text
   status     String    @db.VarChar(16)
   client_id  Int
-  foreman_id Int?
+  foreman_id Int
   created_at DateTime  @default(now()) @db.Date
   images     images[]
   clients    clients   @relation(fields: [client_id], references: [user_id], onDelete: Cascade, map: "fk_project-client")
-  foreman    foreman?  @relation(fields: [foreman_id], references: [user_id], onDelete: Cascade, map: "fk_project-foreman")
+  foreman    foreman   @relation(fields: [foreman_id], references: [user_id], onDelete: Cascade, map: "fk_project-foreman")
   reports    reports[]
 
   @@index([client_id], map: "fk_project-client")
@@ -94,11 +95,12 @@ model projects {
 
 model proposals {
   id         Int      @id @default(autoincrement())
-  price      Int
+  budget     Int
   deadline   DateTime @db.Date
   field      String   @db.Text
   title      String   @db.VarChar(128)
   content    String   @db.Text
+  location   String   @db.Text
   photo      String   @db.Text
   status     String   @db.VarChar(64)
   client_id  Int
