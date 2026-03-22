@@ -14,13 +14,20 @@ export const clientService = {
     const result = name
       ? await clientRepo.findByName(name, paging)
       : await clientRepo.findAll(paging);
+
+    const formattedUser = result.data.map((d) => {
+      const userDetails = d.users;
+      delete d.users;
+      return { ...userDetails, ...d };
+    });
+
     if (result.length === 0)
       throw throwError(200, "Tidak menemukan klien yang cocok");
 
     paging = { ...paging, totalItems: result.count };
     delete result.count;
 
-    const payload = { data: result, paging };
+    const payload = { data: formattedUser, paging };
     return payload;
   },
 };

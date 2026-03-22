@@ -18,10 +18,16 @@ export const foremanService = {
     if (result.length === 0)
       throw throwError(200, "Tidak menemukan mandor yang cocok");
 
+    const formattedUser = result.data.map((d) => {
+      const userDetails = d.users;
+      delete d.users;
+      return { ...userDetails, ...d };
+    });
+
     paging = { ...paging, totalItems: result.count };
     delete result.count;
 
-    const payload = { data: result, paging };
+    const payload = { data: formattedUser, paging };
     return payload;
   },
   updateProfile: async (data, file, user) => {
