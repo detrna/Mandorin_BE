@@ -90,7 +90,7 @@ export const proposalService = {
     if (!dbTransaction)
       dbTransaction = await transactionRepo.create({ proposal_id: id });
 
-    const response = await midtrans(dbProposal, dbTransaction);
+    const response = await midtrans.pay(dbProposal, dbTransaction);
     return response;
   },
   notification: async (data) => {
