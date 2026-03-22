@@ -76,9 +76,9 @@ model projects {
   id         Int       @id @default(autoincrement())
   title      String    @db.VarChar(64)
   content    String    @db.Text
-  price      Int
-  duration   Int
-  contract   Int?
+  budget     Int
+  deadline   String    @db.VarChar(64)
+  location   String?   @db.Text
   status     String    @db.VarChar(16)
   client_id  Int
   foreman_id Int?
@@ -154,6 +154,7 @@ model users {
   address     String   @db.VarChar(256)
   email       String   @unique @db.VarChar(256)
   password    String   @db.VarChar(256)
+  phone       String   @db.VarChar(64)
   avatar      String?  @db.Text
   clients     clients?
   foreman     foreman?

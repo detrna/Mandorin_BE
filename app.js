@@ -10,6 +10,7 @@ import foremanRoutes from "./routes/foremanRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import appointmentRoutes from "./routes/appointmentRoutes.js";
 import proposalRoutes from "./routes/proposalRoutes.js";
+import projectRoutes from "./routes/projectRoutes.js";
 
 const app = express();
 app.use(
@@ -30,6 +31,8 @@ app.use(`${prefix}/foreman`, foremanRoutes);
 app.use(`${prefix}/reviews`, reviewRoutes);
 app.use(`${prefix}/appointments`, appointmentRoutes);
 app.use(`${prefix}/proposals`, proposalRoutes);
+app.use(`${prefix}/projects`, projectRoutes);
+
 app.get("/cookie", (req, res) => {
   const refresh = req.cookies.refreshToken;
   const decoded = jwtHelper.verifyRefresh(refresh);

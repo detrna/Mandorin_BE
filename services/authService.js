@@ -24,7 +24,8 @@ export const authService = {
       address: data.address,
       email: data.email,
       password: hashedPass,
-      avatar: avatarUrl,
+      phone: data.phone,
+      avatar: avatarUrl ?? null,
     };
     const client = {
       nick: data.nick,
@@ -68,7 +69,8 @@ export const authService = {
       address: data.address,
       email: data.email,
       password: hashedPass,
-      avatar: avatarUrl || null,
+      phone: data.phone,
+      avatar: avatarUrl ?? null,
     };
     const foreman = {
       nik: data.nik,
