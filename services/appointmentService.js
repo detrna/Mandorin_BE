@@ -32,6 +32,9 @@ export const appointmentService = {
   },
   findAll: async (data, pagination) => {
     const result = await appointmentRepo.findAllByUID(data.id, pagination);
+    if (result[1] === 0)
+      throw throwError(200, "Pengguna belum memiliki janji temu");
+
     const paging = { ...pagination, totalItems: result[1] };
     const payload = { data: result[0], paging };
     return payload;
