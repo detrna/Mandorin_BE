@@ -27,13 +27,17 @@ export const milestoneService = {
 
     return result;
   },
-  findAll: async (params) => {
+  findAll: async (params, pagination) => {
     const result = await milestoneRepo.findAllByProject(
       Number(params.projectId),
+      pagination,
     );
     if (result.length === 0)
       throw throwError(200, "Project belum memiliki milestone");
-    return result;
+
+    const paging = { ...pagination, totalItems: result[1] };
+    const payload = { data: result[0], paging };
+    return payload;
   },
   update: async (data, params, file) => {
     const dbMilestone = milestoneRepo.findById(Number(params.id));

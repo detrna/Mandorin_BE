@@ -29,8 +29,14 @@ export const projectService = {
 
     return result;
   },
-  findAll: async (query) => {
-    const result = await projectRepo.findAllByUID(Number(query.userId));
-    return result;
+  findAll: async (query, pagination) => {
+    const result = await projectRepo.findAllByUID(
+      Number(query.userId),
+      pagination,
+    );
+
+    const paging = { ...pagination, totalItems: result[1] };
+    const payload = { data: result[0], paging };
+    return payload;
   },
 };

@@ -23,8 +23,14 @@ export const projectController = {
   },
   findAll: async (req, res) => {
     try {
-      const result = await projectService.findAll(req.query);
-      response(res, 200, result, "Project berhasil diambil");
+      const result = await projectService.findAll(req.query, req.pagination);
+      response(
+        res,
+        200,
+        result.data,
+        "Project berhasil diambil",
+        result.paging,
+      );
     } catch (err) {
       console.log(err);
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
@@ -41,8 +47,14 @@ export const projectController = {
   },
   findMilestones: async (req, res) => {
     try {
-      const result = await milestoneService.findAll(req.params);
-      response(res, 200, result, "Milestone berhasil didapat");
+      const result = await milestoneService.findAll(req.params, req.pagination);
+      response(
+        res,
+        200,
+        result.data,
+        "Milestone berhasil didapat",
+        result.paging,
+      );
     } catch (err) {
       console.log(err);
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
