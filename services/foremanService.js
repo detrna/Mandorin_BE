@@ -7,7 +7,12 @@ export const foremanService = {
     const result = await foremanRepo.findById(Number(data.id));
     if (!result)
       throw throwError(404, "Tidak dapat menemukan akun yang diminta");
-    return payload;
+
+    const userDetails = result.users;
+    delete result.users;
+    const formattedUser = { ...userDetails, ...result };
+
+    return formattedUser;
   },
   findAll: async (data, pagination) => {
     const { name } = data;
