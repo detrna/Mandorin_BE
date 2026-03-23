@@ -180,10 +180,10 @@ model milestones {
   content    String   @db.Text
   completed  Boolean  @default(false)
   deadline   DateTime @db.Date
-  photo      String   @db.Text
-  comment    String   @db.Text
-  id_project Int
-  projects   projects @relation(fields: [id_project], references: [id], onDelete: Cascade, map: "fk_milestone-project")
+  photo      String?  @db.Text
+  comment    String?  @db.Text
+  project_id Int
+  projects   projects @relation(fields: [project_id], references: [id], onDelete: Cascade, map: "fk_milestone-project")
 
-  @@index([id_project], map: "fk_milestone-project")
+  @@index([project_id], map: "fk_milestone-project")
 }

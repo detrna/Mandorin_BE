@@ -14,5 +14,8 @@ export const projectRepo = {
       prisma.projects.count({ where: { id: id } }),
     ]),
   findById: async (id) =>
-    await prisma.projects.findFirst({ where: { id: id } }),
+    await prisma.projects.findUnique({
+      include: { milestones: true },
+      where: { id: id },
+    }),
 };
