@@ -73,20 +73,21 @@ model jwt {
 }
 
 model projects {
-  id         Int       @id @default(autoincrement())
-  field      String    @db.VarChar(128)
-  title      String    @db.VarChar(128)
-  content    String    @db.Text
+  id         Int          @id @default(autoincrement())
+  field      String       @db.VarChar(128)
+  title      String       @db.VarChar(128)
+  content    String       @db.Text
   budget     Int
-  deadline   DateTime  @db.Date
-  location   String    @db.Text
-  status     String    @db.VarChar(16)
+  deadline   DateTime     @db.Date
+  location   String       @db.Text
+  status     String       @db.VarChar(16)
   client_id  Int
   foreman_id Int
-  created_at DateTime  @default(now()) @db.Date
+  created_at DateTime     @default(now()) @db.Date
   images     images[]
-  clients    clients   @relation(fields: [client_id], references: [user_id], onDelete: Cascade, map: "fk_project-client")
-  foreman    foreman   @relation(fields: [foreman_id], references: [user_id], onDelete: Cascade, map: "fk_project-foreman")
+  milestones milestones[]
+  clients    clients      @relation(fields: [client_id], references: [user_id], onDelete: Cascade, map: "fk_project-client")
+  foreman    foreman      @relation(fields: [foreman_id], references: [user_id], onDelete: Cascade, map: "fk_project-foreman")
   reports    reports[]
 
   @@index([client_id], map: "fk_project-client")
@@ -171,4 +172,18 @@ model transactions {
   updated_at  Int?
   midtrans_id Int?
   proposal_id Int     @unique
+}
+
+model milestones {
+  id         Int      @id @default(autoincrement())
+  title      String   @db.VarChar(128)
+  content    String   @db.Text
+  completed  Boolean  @default(false)
+  deadline   DateTime @db.Date
+  photo      String   @db.Text
+  comment    String   @db.Text
+  id_project Int
+  projects   projects @relation(fields: [id_project], references: [id], onDelete: Cascade, map: "fk_milestone-project")
+
+  @@index([id_project], map: "fk_milestone-project")
 }

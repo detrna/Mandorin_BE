@@ -46,6 +46,7 @@ export const foremanRepo = {
         },
       },
       include: { foreman: true },
+      omit: { password: true },
     }),
   findByName: async (query, pagination) => {
     const [data, count] = await prisma.$transaction([
