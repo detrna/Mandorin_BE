@@ -12,6 +12,8 @@ import appointmentRoutes from "./routes/appointmentRoutes.js";
 import proposalRoutes from "./routes/proposalRoutes.js";
 import projectRoutes from "./routes/projectRoutes.js";
 import milestoneRoutes from "./routes/milestoneRoutes.js";
+import revisionRoutes from "./routes/reviewRoutes.js";
+import reportRoutes from "./routes/reportRoutes.js";
 
 const app = express();
 app.use(
@@ -34,6 +36,8 @@ app.use(`${prefix}/appointments`, appointmentRoutes);
 app.use(`${prefix}/proposals`, proposalRoutes);
 app.use(`${prefix}/projects`, projectRoutes);
 app.use(`${prefix}/milestones`, milestoneRoutes);
+app.use(`${prefix}/reports`, reportRoutes);
+app.use(`${prefix}/revisions`, revisionRoutes);
 
 app.get("/cookie", (req, res) => {
   const refresh = req.cookies.refreshToken;
