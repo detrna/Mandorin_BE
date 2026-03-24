@@ -89,6 +89,7 @@ model projects {
   clients    clients      @relation(fields: [client_id], references: [user_id], onDelete: Cascade, map: "fk_project-client")
   foreman    foreman      @relation(fields: [foreman_id], references: [user_id], onDelete: Cascade, map: "fk_project-foreman")
   reports    reports[]
+  revisions  revisions[]
 
   @@index([client_id], map: "fk_project-client")
   @@index([foreman_id], map: "fk_project-foreman")
@@ -116,9 +117,12 @@ model proposals {
 
 model reports {
   id         Int      @id @default(autoincrement())
+  title      String   @db.VarChar(128)
   content    String   @db.Text
   comment    String?  @db.Text
+  photo      String   @db.Text
   project_id Int
+  created_at DateTime @default(now()) @db.Date
   images     images[]
   projects   projects @relation(fields: [project_id], references: [id], onDelete: Cascade, map: "fk_report-project")
 
@@ -143,9 +147,14 @@ model revisions {
   id         Int      @id @default(autoincrement())
   content    String   @db.Text
   cause      String   @db.Text
-  price      Int
+  budget     Int
   deadline   DateTime @db.Date
+  status     String   @default("MENUNGGU PERSETUJUAN") @db.VarChar(32)
+  project_id Int
   created_at DateTime @default(now()) @db.Date
+  projects   projects @relation(fields: [project_id], references: [id], onDelete: Cascade, map: "fk_revision-project")
+
+  @@index([project_id], map: "fk_revision-project")
 }
 
 model users {
