@@ -119,7 +119,6 @@ model reports {
   id         Int      @id @default(autoincrement())
   title      String   @db.VarChar(128)
   content    String   @db.Text
-  comment    String?  @db.Text
   photo      String   @db.Text
   project_id Int
   created_at DateTime @default(now()) @db.Date
@@ -190,8 +189,8 @@ model milestones {
   completed  Boolean  @default(false)
   deadline   DateTime @db.Date
   photo      String?  @db.Text
-  comment    String?  @db.Text
   project_id Int
+  comment    String?  @db.Text
   projects   projects @relation(fields: [project_id], references: [id], onDelete: Cascade, map: "fk_milestone-project")
 
   @@index([project_id], map: "fk_milestone-project")
