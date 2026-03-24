@@ -35,8 +35,24 @@ export const projectService = {
       pagination,
     );
 
+    if (result[0].length === 0)
+      throw throwError(200, "Pengguna belum memiliki project");
+
+    const formattedResult = result[0].map((project) => {
+      const clientDetails = project.clients.users;
+      const foremanDetails = project.foreman.users;
+
+      delete project.foreman.users;
+      delete project.clients.users;
+
+      const clientData = { ...clientDetails, ...project.clients };
+      const foremanData = { ...foremanDetails, ...project.foreman };
+
+      return { ...project, clients: clientData, foreman: foremanData };
+    });
+
     const paging = { ...pagination, totalItems: result[1] };
-    const payload = { data: result[0], paging };
+    const payload = { data: formattedResult, paging };
     return payload;
   },
 };

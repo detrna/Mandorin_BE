@@ -121,7 +121,7 @@ export const authService = {
     if (!result) throw throwError(200, "Incorrect email or password");
 
     const isMatch = await hashHelper.compare(data.password, result.password);
-    if (isMatch) (200, "Incorrect email or password");
+    if (!isMatch) throw throwError(200, "Incorrect email or password");
 
     const jti = crypto.randomUUID();
     const accessToken = jwtHelper.signAccess(result);
