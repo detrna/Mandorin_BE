@@ -133,7 +133,6 @@ model reviews {
   content    String  @db.VarChar(512)
   client_id  Int
   foreman_id Int
-  photo      String  @db.Text
   score      Int
   clients    clients @relation(fields: [client_id], references: [user_id], onDelete: Cascade, map: "fk_review-client")
   foreman    foreman @relation(fields: [foreman_id], references: [user_id], onDelete: Cascade, map: "fk_review-foreman")
