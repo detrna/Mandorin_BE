@@ -87,6 +87,11 @@ export const proposalService = {
       throw throwError(403, "Proposal yang diminta tidak dapat ditemukan");
     if (dbProposal.client_id !== user.id)
       throw throwError(403, "Pengguna tidak memiliki proposal terkait");
+    if (dbProposal.status === "DITERIMA")
+      throw throwError(
+        400,
+        "Tidak dapat membayar proposal yang sudah diterima",
+      );
 
     let dbTransaction = await transactionRepo.findByItemId(id);
     if (!dbTransaction)
