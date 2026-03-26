@@ -4,6 +4,7 @@ export default function response(
   data,
   message,
   pagination = null,
+  success = null,
 ) {
   const getPageInfo = (pagination) => {
     const { page, limit, totalItems } = pagination;
@@ -21,7 +22,7 @@ export default function response(
 
   const getMeta = () => ({ timestamp: new Date().toISOString() });
   const payload = {
-    success: statusCode >= 200 && statusCode < 300,
+    success: success ?? (statusCode >= 200 && statusCode < 300),
     data,
     message,
     metadata: getMeta(),

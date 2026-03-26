@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { throwError } from "../utility/throwError.js";
+import { throwError } from "./throwError.js";
 import crypto from "crypto";
 
 export const midtrans = {
@@ -18,7 +18,7 @@ export const midtrans = {
     const customer_details = {
       first_name: dbProposal.clients.users.name,
       email: dbProposal.clients.users.email,
-      phone: null,
+      phone: dbProposal.clients.users.phone,
     };
 
     const item_details = [
@@ -61,24 +61,24 @@ export const midtrans = {
       return err;
     }
   },
+
   notification: async (data) => {
     const { order_id, transaction_status, fraud_status } = data;
+    const serverKey = process.env.SERVER_KEY;
 
-    if (
-      !(transaction_status === "capture" || transaction_status === "settlement")
-    )
-      throw throwError(200, "Payment has yet to be made");
+    if (transaction_status === "pending") return;
 
-    if (transaction_status === "caputre" && fraud_status !== "accept") {
-      throw throwError(200, "Fraud status has yet to be accepted");
-    }
+    if (transaction_status === "caputre" && fraud_status !== "accept") return;
 
-    if (!verifyMidtransSignature)
+    if (!verifyMidtransSignature(data, serverKey))
       throw throwError(200, "Invalid MidTrans Siganture Key");
 
     const payment = {
-      id: order_id.split("-")[0],
-      payment_status: true,
+      id: Number(order_id.split("-")[0]),
+      midtrans_id: data.transaction_id,
+      amount: Number(data.gross_amount),
+      updated_at: new Date(data.transaction_time),
+      status: data.transaction_status,
     };
 
     return payment;

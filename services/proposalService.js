@@ -1,4 +1,4 @@
-import { midtrans } from "../lib/midtrans.js";
+import { midtrans } from "../utility/midtrans.js";
 import { supabaseHelper } from "../lib/supabase.js";
 import { clientRepo } from "../repositories/clientRepo.js";
 import { foremanRepo } from "../repositories/foremanRepo.js";
@@ -92,13 +92,35 @@ export const proposalService = {
     if (!dbTransaction)
       dbTransaction = await transactionRepo.create({ proposal_id: id });
 
-    const response = await midtrans.pay(dbProposal, dbTransaction);
-    return response;
+    try {
+      const payload = await midtrans.pay(dbProposal, dbTransaction);
+      return payload;
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
+    return payload;
   },
   notification: async (data) => {
-    const payment = midtrans.notification(data);
-    console.log(payment);
-    process.exit();
-    return midtrans;
+    try {
+      const payment = await midtrans.notification(data);
+      if (!payment) return;
+
+      await transactionRepo.update(payment);
+
+      if (payment.status === "denied" || payment.status === "expire")
+        throw throwError(200, `Pembayaran gagal terbuat: ${payment.status}`);
+
+      const dbTransaction = await transactionRepo.findById(payment.id);
+      const proposalData = {
+        id: dbTransaction.proposal_id,
+        status: "DITERIMA",
+      };
+
+      const result = await proposalRepo.update(proposalData);
+      return result;
+    } catch (err) {
+      throw throwError(200, err.message);
+    }
   },
 };

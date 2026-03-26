@@ -172,13 +172,13 @@ model users {
 }
 
 model transactions {
-  id          Int     @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   amount      Int?
-  status      String? @db.VarChar(128)
-  created_at  Int     @default(dbgenerated("(current_timestamp())"))
-  updated_at  Int?
-  midtrans_id Int?
-  proposal_id Int     @unique
+  status      String?   @db.VarChar(128)
+  created_at  DateTime  @default(now()) @db.DateTime(0)
+  updated_at  DateTime? @db.DateTime(0)
+  midtrans_id String?   @default(uuid())
+  proposal_id Int       @unique
 }
 
 model milestones {

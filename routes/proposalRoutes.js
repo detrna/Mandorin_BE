@@ -12,6 +12,7 @@ router.get("/:id", authenticate, proposalController.find);
 router.post(
   "/",
   authenticate,
+  roleGuard("foreman"),
   uploadHelper.single("photo"),
   proposalController.create,
 );
@@ -23,5 +24,6 @@ router.patch(
   roleGuard("client"),
   proposalController.pay,
 );
+router.post("/notification", proposalController.notification);
 
 export default router;

@@ -66,7 +66,20 @@ export const proposalController = {
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
     }
   },
-  notification: () => {
-    return;
+  notification: async (req, res) => {
+    try {
+      const result = await proposalService.notification(req.body);
+      response(res, 200, result, "Sesi pembayaran berhasil dibuat");
+    } catch (err) {
+      console.log(err);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
+    }
   },
 };
