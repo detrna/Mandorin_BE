@@ -2,18 +2,18 @@ import "dotenv/config";
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { jwtHelper } from "./utility/jwtHelper.js";
+import { jwtHelper } from "./src/utility/jwtHelper.js";
 
-import authRoutes from "./routes/authRoutes.js";
-import clientRoutes from "./routes/clientRoutes.js";
-import foremanRoutes from "./routes/foremanRoutes.js";
-import reviewRoutes from "./routes/reviewRoutes.js";
-import appointmentRoutes from "./routes/appointmentRoutes.js";
-import proposalRoutes from "./routes/proposalRoutes.js";
-import projectRoutes from "./routes/projectRoutes.js";
-import milestoneRoutes from "./routes/milestoneRoutes.js";
-import revisionRoutes from "./routes/reviewRoutes.js";
-import reportRoutes from "./routes/reportRoutes.js";
+import authRoutes from "./src/routes/authRoutes.js";
+import clientRoutes from "./src/routes/clientRoutes.js";
+import foremanRoutes from "./src/routes/foremanRoutes.js";
+import reviewRoutes from "./src/routes/reviewRoutes.js";
+import appointmentRoutes from "./src/routes/appointmentRoutes.js";
+import proposalRoutes from "./src/routes/proposalRoutes.js";
+import projectRoutes from "./src/routes/projectRoutes.js";
+import milestoneRoutes from "./src/routes/milestoneRoutes.js";
+import revisionRoutes from "./src/routes/reviewRoutes.js";
+import reportRoutes from "./src/routes/reportRoutes.js";
 
 const app = express();
 app.use(
