@@ -1,70 +1,61 @@
 import JoiBase from "joi";
 import joiPhoneNumber from "joi-phone-number";
-import { getCommonMessages } from "./joiMessages";
+import { getJoiMessages } from "./joiMessages";
 
 const Joi = JoiBase.extend(joiPhoneNumber);
 
 export const foremanSchema = {
   update: Joi.object({
-    name: Joi.string()
-      .min(3)
-      .max(100)
-      .label("Nama")
-      .messages(getCommonMessages()),
+    name: Joi.string().min(3).max(100).label("Nama").messages(getJoiMessages()),
 
     nik: Joi.string()
       .regex(/^[0-9]+$/)
       .length(16)
       .label("NIK")
       .messages({
-        ...getCommonMessages(),
+        ...getJoiMessages(),
         "string.length": "{#label} harus tepat 16 digit",
       }),
 
-    birth_place: Joi.string()
-      .label("Tempat Lahir")
-      .messages(getCommonMessages()),
+    birth_place: Joi.string().label("Tempat Lahir").messages(getJoiMessages()),
 
     birth_date: Joi.date()
       .iso()
       .label("Tanggal Lahir")
-      .messages(getCommonMessages()),
+      .messages(getJoiMessages()),
 
     sex: Joi.string()
       .valid("male", "female")
       .label("Jenis Kelamin")
-      .messages(getCommonMessages()),
+      .messages(getJoiMessages()),
 
-    address: Joi.string().label("Alamat").messages(getCommonMessages()),
+    address: Joi.string().label("Alamat").messages(getJoiMessages()),
 
-    password: Joi.string()
-      .min(8)
-      .label("Password")
-      .messages(getCommonMessages()),
+    password: Joi.string().min(8).label("Password").messages(getJoiMessages()),
 
     confirm: Joi.string()
       .valid(Joi.ref("password"))
       .label("Konfirmasi Password")
       .messages({
-        ...getCommonMessages(),
+        ...getJoiMessages(),
         "any.only": "Konfirmasi password tidak cocok",
       }),
 
-    field: Joi.string().label("Bidang").messages(getCommonMessages()),
+    field: Joi.string().label("Bidang").messages(getJoiMessages()),
 
-    area: Joi.string().label("Area").messages(getCommonMessages()),
+    area: Joi.string().label("Area").messages(getJoiMessages()),
 
     experience: Joi.number()
       .integer()
       .min(0)
       .label("Pengalaman (Tahun)")
-      .messages(getCommonMessages()),
+      .messages(getJoiMessages()),
 
-    bio: Joi.string().max(2000).label("Biografi").messages(getCommonMessages()),
+    bio: Joi.string().max(2000).label("Biografi").messages(getJoiMessages()),
 
     strength: Joi.string()
       .label("Keahlian/Kekuatan")
-      .messages(getCommonMessages()),
+      .messages(getJoiMessages()),
 
     phone: Joi.string()
       .phoneNumber({
@@ -81,5 +72,5 @@ export const foremanSchema = {
   })
     .min(1)
     .with("password", "confirm")
-    .messages(getCommonMessages()),
+    .messages(getJoiMessages()),
 };

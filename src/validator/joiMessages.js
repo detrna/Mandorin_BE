@@ -1,4 +1,4 @@
-export const getCommonMessages = (label = "{#label}") => ({
+export const getJoiMessages = (label = "{#label}") => ({
   "string.empty": `${label} tidak boleh kosong`,
   "string.min": `${label} minimal {#limit} karakter`,
   "string.max": `${label} maksimal {#limit} karakter`,
@@ -16,4 +16,5 @@ export const getCommonMessages = (label = "{#label}") => ({
   "array.min": `Minimal harus ada {#limit} data yang dikirim`,
   "object.min": `Setidaknya harus ada satu field yang dikirim`,
   "string.pattern.base": `Format ${label} tidak valid`,
+  "string.phoneNumber": "Nomor telepon tidak valid",
 });

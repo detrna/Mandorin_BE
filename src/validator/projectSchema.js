@@ -1,13 +1,7 @@
 import JoiBase from "joi";
+import { getJoiMessages } from "./joiMessages";
 
 const Joi = JoiBase;
-
-const commonMessages = {
-  "number.base": "{#label} harus berupa angka",
-  "number.integer": "{#label} harus berupa bilangan bulat",
-  "number.positive": "{#label} tidak valid",
-  "any.required": "{#label} wajib diisi",
-};
 
 export const projectSchema = {
   create: Joi.object({
@@ -16,6 +10,6 @@ export const projectSchema = {
       .positive()
       .required()
       .label("ID Proposal")
-      .messages(commonMessages),
+      .messages(getJoiMessages()),
   }),
 };
