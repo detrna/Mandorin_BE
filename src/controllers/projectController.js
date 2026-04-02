@@ -36,28 +36,4 @@ export const projectController = {
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
     }
   },
-  addMilestone: async (req, res) => {
-    try {
-      const result = await milestoneService.create(req.body, req.params);
-      response(res, 200, result, "Milestone berhasil ditambahkan");
-    } catch (err) {
-      console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
-    }
-  },
-  findMilestones: async (req, res) => {
-    try {
-      const result = await milestoneService.findAll(req.params, req.pagination);
-      response(
-        res,
-        200,
-        result.data,
-        "Milestone berhasil didapat",
-        result.paging,
-      );
-    } catch (err) {
-      console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
-    }
-  },
 };

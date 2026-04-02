@@ -4,6 +4,8 @@ import { paginate } from "../middleware/paginate.js";
 import { proposalController } from "../controllers/proposalController.js";
 import { uploadHelper } from "../middleware/uploadHelper.js";
 import { roleGuard } from "../middleware/roleGuard.js";
+import { validate } from "../middleware/validate.js";
+import { proposalSchema } from "../validator/proposalSchema.js";
 
 const router = Router();
 
@@ -14,9 +16,16 @@ router.post(
   authenticate,
   roleGuard("foreman"),
   uploadHelper.single("photo"),
+  validate(proposalSchema.create),
   proposalController.create,
 );
-router.patch("/:id", authenticate, proposalController.update);
+router.patch(
+  "/:id",
+  authenticate,
+  roleGuard("foreman"),
+  validate(proposalSchema.update),
+  proposalController.update,
+);
 router.delete("/:id", authenticate, proposalController.delete);
 router.patch(
   "/:id/pay",

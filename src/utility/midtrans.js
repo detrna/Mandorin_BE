@@ -92,3 +92,5 @@ function verifyMidtransSignature(notificationBody, serverKey) {
   const hash = crypto.createHash("sha512").update(payload).digest("hex");
   return hash === signature_key;
 }
+
+

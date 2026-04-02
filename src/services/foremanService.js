@@ -51,7 +51,6 @@ export const foremanService = {
       birth_date: data.birth_date ? new Date(data.birth_date) : null,
       sex: data.sex ?? null,
       address: data.address ?? null,
-      email: data.email ?? null,
       avatar: avatarUrl ?? null,
     };
 

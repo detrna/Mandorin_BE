@@ -15,6 +15,7 @@ const router = Router();
 router.use(`/auth`, authRoutes);
 router.use(`/clients`, clientRoutes);
 router.use(`/foreman`, foremanRoutes);
+router.use(`/appointments`, appointmentRoutes);
 router.use(`/reviews`, reviewRoutes);
 router.use(`/routerointments`, appointmentRoutes);
 router.use(`/proposals`, proposalRoutes);
