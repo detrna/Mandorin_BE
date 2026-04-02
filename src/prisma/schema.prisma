@@ -156,19 +156,21 @@ model revisions {
 }
 
 model users {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(256)
-  birth_place String   @db.VarChar(64)
-  birth_date  DateTime @db.Date
-  sex         String   @db.VarChar(16)
-  address     String   @db.VarChar(256)
-  email       String   @unique @db.VarChar(256)
-  password    String   @db.VarChar(256)
-  phone       String   @db.VarChar(64)
-  avatar      String?  @db.Text
-  clients     clients?
-  foreman     foreman?
-  jwt         jwt[]
+  id                             Int      @id @default(autoincrement())
+  name                           String   @db.VarChar(256)
+  birth_place                    String   @db.VarChar(64)
+  birth_date                     DateTime @db.Date
+  sex                            String   @db.VarChar(16)
+  address                        String   @db.VarChar(256)
+  email                          String   @unique @db.VarChar(256)
+  password                       String   @db.VarChar(256)
+  phone                          String   @db.VarChar(64)
+  avatar                         String?  @db.Text
+  chats_chats_receiver_idTousers chats[]  @relation("chats_receiver_idTousers")
+  chats_chats_sender_idTousers   chats[]  @relation("chats_sender_idTousers")
+  clients                        clients?
+  foreman                        foreman?
+  jwt                            jwt[]
 }
 
 model transactions {
@@ -193,4 +195,19 @@ model milestones {
   projects   projects @relation(fields: [project_id], references: [id], onDelete: Cascade, map: "fk_milestone-project")
 
   @@index([project_id], map: "fk_milestone-project")
+}
+
+model chats {
+  id                             Int       @id @default(autoincrement())
+  content                        String    @db.Text
+  image                          String    @db.Text
+  sender_id                      Int
+  receiver_id                    Int
+  created_at                     DateTime  @default(now()) @db.DateTime(0)
+  read_at                        DateTime? @db.DateTime(0)
+  users_chats_receiver_idTousers users     @relation("chats_receiver_idTousers", fields: [receiver_id], references: [id], onDelete: Cascade, map: "fk_chat-user_receiver")
+  users_chats_sender_idTousers   users     @relation("chats_sender_idTousers", fields: [sender_id], references: [id], onDelete: Cascade, map: "fk_chat-user_sender")
+
+  @@index([receiver_id], map: "fk_chat-user_receiver")
+  @@index([sender_id], map: "fk_chat-user_sender")
 }
