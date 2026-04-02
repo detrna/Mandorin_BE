@@ -1,6 +1,6 @@
 import JoiBase from "joi";
 import joiPhoneNumber from "joi-phone-number";
-import { getJoiMessages } from "./joiMessages";
+import { getJoiMessages } from "./joiMessages.js";
 const Joi = JoiBase.extend(joiPhoneNumber);
 
 export const appointmentSchema = {

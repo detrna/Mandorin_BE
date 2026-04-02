@@ -1,5 +1,5 @@
 import JoiBase from "joi";
-import { getJoiMessages } from "./joiMessages";
+import { getJoiMessages } from "./joiMessages.js";
 
 const Joi = JoiBase;
 
