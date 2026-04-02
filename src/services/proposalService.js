@@ -104,7 +104,6 @@ export const proposalService = {
       console.log(err);
       return err;
     }
-    return payload;
   },
   notification: async (data) => {
     try {
