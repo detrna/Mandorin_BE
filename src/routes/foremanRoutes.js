@@ -7,7 +7,7 @@ import { paginate } from "../middleware/paginate.js";
 const router = Router();
 
 router.get("/:id", foremanController.findOne);
-router.get("/", paginate(), foremanController.findAll);
+router.get("/", paginate(15), foremanController.findAll);
 router.patch(
   "/",
   authenticate,

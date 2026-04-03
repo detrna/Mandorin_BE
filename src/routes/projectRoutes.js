@@ -32,7 +32,7 @@ router.post(
 router.get(
   "/:projectId/milestones",
   authenticate,
-  paginate(),
+  paginate(10),
   milestoneController.findMilestones,
 );
 router.post(
@@ -46,7 +46,7 @@ router.post(
 router.get(
   "/:projectId/reports",
   authenticate,
-  paginate(),
+  paginate(6),
   reportController.findAll,
 );
 

@@ -15,7 +15,7 @@ router.post(
   validate(reviewSchema.create),
   reviewController.create,
 );
-router.get("/", paginate(), reviewController.findAll);
+router.get("/", paginate(10), reviewController.findAll);
 router.delete(
   "/:id",
   authenticate,

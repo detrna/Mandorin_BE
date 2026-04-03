@@ -9,7 +9,7 @@ import { proposalSchema } from "../validator/proposalSchema.js";
 
 const router = Router();
 
-router.get("/", authenticate, paginate(), proposalController.findAll);
+router.get("/", authenticate, paginate(15), proposalController.findAll);
 router.get("/:id", authenticate, proposalController.find);
 router.post(
   "/",

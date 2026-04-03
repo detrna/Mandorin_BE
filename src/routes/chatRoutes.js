@@ -16,8 +16,8 @@ router.post(
   chatController.sendMessage,
 );
 
-router.get("/", authenticate, paginate(), chatController.getAllLastReceived);
-router.get("/received", authenticate, paginate(), chatController.getReceived);
+router.get("/", authenticate, paginate(30), chatController.getAllLastReceived);
+router.get("/received", authenticate, paginate(30), chatController.getReceived);
 router.patch("/read", authenticate, chatController.read);
 router.delete("/:id", authenticate, chatController.delete);
 

@@ -7,7 +7,7 @@ import { appointmentSchema } from "../validator/appointmentSchema.js";
 
 const router = Router();
 
-router.get("/", authenticate, paginate(), appointmentController.findAll);
+router.get("/", authenticate, paginate(15), appointmentController.findAll);
 router.get("/:id", authenticate, appointmentController.find);
 router.post(
   "/",
