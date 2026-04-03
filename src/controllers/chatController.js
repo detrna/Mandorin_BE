@@ -1,10 +1,14 @@
 import { chatService } from "../services/chatService.js";
 import response from "../utility/response.js";
 
-export default chatController = {
+export const chatController = {
   sendMessage: async (req, res) => {
     try {
-      const result = await chatService.sendMessage(req.user, req.body);
+      const result = await chatService.sendMessage(
+        req.user,
+        req.body,
+        req.file,
+      );
 
       response(res, 200, result, "Pesan berhasil terkirim", null, true);
     } catch (err) {
@@ -21,9 +25,9 @@ export default chatController = {
   },
   getReceived: async (req, res) => {
     try {
-      const result = await chatService.getReceivedMessages(
+      const result = await chatService.findConversation(
         req.user,
-        req.body,
+        req.query,
         req.pagination,
       );
 
@@ -50,9 +54,8 @@ export default chatController = {
 
   getAllLastReceived: async (req, res) => {
     try {
-      const result = await chatService.getAllLastReceivedMessages(
+      const result = await chatService.findAllConversation(
         req.user,
-        req.body,
         req.pagination,
       );
 
@@ -79,7 +82,7 @@ export default chatController = {
 
   read: async (req, res) => {
     try {
-      const result = await chatService.readMessage(req.user, req.body);
+      const result = await chatService.readMessage(req.user, req.query);
 
       response(res, 200, result, "Pesan berhasil didapatkan", null, true);
     } catch (err) {
@@ -97,9 +100,9 @@ export default chatController = {
 
   delete: async (req, res) => {
     try {
-      const result = await chatService.delete(req.params);
+      const result = await chatService.delete(req.user, req.params);
 
-      response(res, 200, result, "Pesan berhasil didapatkan", null, true);
+      response(res, 200, result, "Pesan berhasil dihapus", null, true);
     } catch (err) {
       console.log(err);
       response(

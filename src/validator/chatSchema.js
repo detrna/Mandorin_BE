@@ -1,5 +1,5 @@
 import JoiBase from "joi";
-import { getCommonMessages } from "../helpers/joiMessages.js";
+import { getJoiMessages } from "./joiMessages.js";
 
 const Joi = JoiBase;
 
@@ -10,21 +10,13 @@ export const chatSchema = {
       .max(5000)
       .required()
       .label("Isi Pesan")
-      .messages(getCommonMessages()),
+      .messages(getJoiMessages()),
 
     receiverId: Joi.number()
       .integer()
       .positive()
       .required()
       .label("ID Penerima")
-      .messages(getCommonMessages()),
-  }),
-  read: Joi.object({
-    senderId: Joi.number()
-      .integer()
-      .positive()
-      .required()
-      .label("ID Pengirim")
-      .messages(getCommonMessages()),
+      .messages(getJoiMessages()),
   }),
 };

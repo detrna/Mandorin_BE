@@ -9,6 +9,7 @@ import projectRoutes from "./projectRoutes.js";
 import milestoneRoutes from "./milestoneRoutes.js";
 import revisionRoutes from "./reviewRoutes.js";
 import reportRoutes from "./reportRoutes.js";
+import chatRoutes from "./chatRoutes.js";
 
 const router = Router();
 
@@ -23,5 +24,6 @@ router.use(`/projects`, projectRoutes);
 router.use(`/milestones`, milestoneRoutes);
 router.use(`/reports`, reportRoutes);
 router.use(`/revisions`, revisionRoutes);
+router.use(`/chats`, chatRoutes);
 
 export default router;
