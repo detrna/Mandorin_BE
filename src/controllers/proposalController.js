@@ -113,7 +113,7 @@ export const proposalController = {
     try {
       const result = await proposalService.notification(req.body);
 
-      if (result) await projectService.create(req.proposal);
+      if (result) await projectService.create(result);
 
       response(res, 200, result, "Project berhasil dibuat");
     } catch (err) {
