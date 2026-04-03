@@ -1,4 +1,3 @@
-import { milestoneService } from "../services/milestoneService.js";
 import { projectService } from "../services/projectService.js";
 import response from "../utility/response.js";
 
@@ -31,6 +30,15 @@ export const projectController = {
         "Project berhasil diambil",
         result.paging,
       );
+    } catch (err) {
+      console.log(err);
+      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+    }
+  },
+  update: async (req, res) => {
+    try {
+      const result = await projectService.update(req.params, req.body);
+      response(res, 200, result, "Status project berhasil dirubah");
     } catch (err) {
       console.log(err);
       response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);

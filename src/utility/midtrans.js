@@ -10,6 +10,8 @@ export const midtrans = {
     const base64String = Buffer.from(credentials).toString("base64");
     const order_id = `${dbTransaction.id}-${Date.now()}`;
 
+    console.log(serverKey);
+
     const transaction_details = {
       order_id,
       gross_amount: dbProposal.budget,
@@ -92,5 +94,3 @@ function verifyMidtransSignature(notificationBody, serverKey) {
   const hash = crypto.createHash("sha512").update(payload).digest("hex");
   return hash === signature_key;
 }
-
-

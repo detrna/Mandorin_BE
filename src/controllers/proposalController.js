@@ -1,3 +1,4 @@
+import { projectService } from "../services/projectService.js";
 import { proposalService } from "../services/proposalService.js";
 import response from "../utility/response.js";
 
@@ -69,7 +70,10 @@ export const proposalController = {
   notification: async (req, res) => {
     try {
       const result = await proposalService.notification(req.body);
-      response(res, 200, result, "Sesi pembayaran berhasil dibuat");
+
+      if (result) await projectService.create(req.proposal);
+
+      response(res, 200, result, "Project berhasil dibuat");
     } catch (err) {
       console.log(err);
       response(

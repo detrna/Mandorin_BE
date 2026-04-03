@@ -16,6 +16,12 @@ const router = Router();
 router.post("/", validate(projectSchema.create), projectController.create);
 router.get("/", paginate(), projectController.findAll);
 router.get("/:id", projectController.find);
+router.patch(
+  "/:id",
+  authenticate,
+  roleGuard("foreman"),
+  projectController.update,
+);
 router.post(
   "/:projectId/milestones",
   authenticate,

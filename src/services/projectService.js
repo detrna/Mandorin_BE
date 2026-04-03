@@ -4,7 +4,9 @@ import { throwError } from "../utility/throwError.js";
 
 export const projectService = {
   create: async (data) => {
-    const dbProposal = await proposalRepo.findById(data.proposalId);
+    const proposalId = data.id ?? data.proposalId;
+
+    const dbProposal = await proposalRepo.findById(proposalId);
     if (!dbProposal)
       throw throwError(400, "Proposal dari project tidak dapat ditemukan");
 
@@ -54,5 +56,14 @@ export const projectService = {
     const paging = { ...pagination, totalItems: result[1] };
     const payload = { data: formattedResult, paging };
     return payload;
+  },
+  update: async (params, data) => {
+    const queryData = {
+      id: Number(params.id),
+      status: data.status,
+    };
+
+    const result = await projectRepo.update(queryData);
+    return result;
   },
 };

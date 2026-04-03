@@ -20,4 +20,6 @@ export const projectRepo = {
       include: { milestones: true },
       where: { id: id },
     }),
+  update: async (data) =>
+    await prisma.projects.update({ where: { id: data.id }, data }),
 };
