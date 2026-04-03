@@ -8,7 +8,14 @@ export const revisionController = {
       response(res, 200, result, "Revisi berhasil diajukan");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   find: async (req, res) => {
@@ -17,7 +24,14 @@ export const revisionController = {
       response(res, 200, result, "Revisi berhasil dambil");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   findAll: async (req, res) => {
@@ -26,7 +40,14 @@ export const revisionController = {
       response(res, 200, result, "Daftar revisi berhasil dambil");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
 };

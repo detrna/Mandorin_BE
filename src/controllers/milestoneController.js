@@ -11,7 +11,14 @@ export const milestoneController = {
       response(res, 200, result, "Milestone berhasil diambil");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   addMilestone: async (req, res) => {
@@ -20,7 +27,14 @@ export const milestoneController = {
       response(res, 200, result, "Milestone berhasil ditambahkan");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   findMilestones: async (req, res) => {
@@ -35,7 +49,14 @@ export const milestoneController = {
       );
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
 };

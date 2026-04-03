@@ -8,7 +8,14 @@ export const clientController = {
       response(res, 200, result, "Data klien berhasil diambil");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   findAll: async (req, res) => {
@@ -23,7 +30,14 @@ export const clientController = {
       );
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
 };

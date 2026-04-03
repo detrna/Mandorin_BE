@@ -18,7 +18,14 @@ export const reviewController = {
       );
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   delete: async (req, res) => {
@@ -27,7 +34,14 @@ export const reviewController = {
       response(res, 200, result, "Ulasan berhasil dihapus");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
 };

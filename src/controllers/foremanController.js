@@ -8,7 +8,14 @@ export const foremanController = {
       response(res, 200, result, "Foreman retrieved successfully");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   findAll: async (req, res) => {
@@ -23,7 +30,14 @@ export const foremanController = {
       );
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   updateData: async (req, res) => {
@@ -36,7 +50,14 @@ export const foremanController = {
       response(res, 200, result, "Foreman profile was updated succesfully");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
 };

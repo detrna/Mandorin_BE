@@ -8,7 +8,14 @@ export const reportController = {
       response(res, 200, result, "Laporan berhasil dibuat");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   find: async (req, res) => {
@@ -17,7 +24,14 @@ export const reportController = {
       response(res, 200, result, "Laporan berhasil dambil");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   findAll: async (req, res) => {
@@ -32,7 +46,14 @@ export const reportController = {
       );
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   delete: async (req, res) => {
@@ -41,7 +62,14 @@ export const reportController = {
       response(res, 200, result, "Laporan berhasil dihapus");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
 };

@@ -12,7 +12,14 @@ export const authController = {
       response(res, 200, payload, "Mandor berhasil terdaftar");
     } catch (err) {
       console.error(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   registerClient: async (req, res) => {
@@ -25,7 +32,14 @@ export const authController = {
       response(res, 200, payload, "Klien berhasil terdaftar");
     } catch (err) {
       console.error(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   refresh: async (req, res) => {
@@ -38,7 +52,14 @@ export const authController = {
       response(res, 200, payload, "Token berhasil di-refresh");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   login: async (req, res) => {
@@ -50,7 +71,14 @@ export const authController = {
       response(res, 200, payload, "Pengguna berhasil login");
     } catch (err) {
       console.error(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   logout: async (req, res) => {
@@ -60,7 +88,14 @@ export const authController = {
       response(res, 200, {}, "Pengguna berhasil logout");
     } catch (err) {
       console.error(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
 };

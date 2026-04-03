@@ -15,7 +15,14 @@ export const proposalController = {
       );
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   find: async (req, res) => {
@@ -24,7 +31,14 @@ export const proposalController = {
       response(res, 200, result, "Data proposal berhasil diambil");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   create: async (req, res) => {
@@ -33,7 +47,14 @@ export const proposalController = {
       response(res, 200, result, "Proposal berhasil dibuat");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   update: async (req, res) => {
@@ -46,7 +67,14 @@ export const proposalController = {
       response(res, 200, result, "Proposal berhasil diperbarui");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   delete: async (req, res) => {
@@ -55,7 +83,14 @@ export const proposalController = {
       response(res, 200, result, "Proposal berhasil dihapus");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   pay: async (req, res) => {
@@ -64,7 +99,14 @@ export const proposalController = {
       response(res, 200, result, "Sesi pembayaran berhasil dibuat");
     } catch (err) {
       console.log(err);
-      response(res, isNaN(err.code) ? 500 : err.code, {}, err.message);
+      response(
+        res,
+        isNaN(err.code) ? 500 : err.code,
+        {},
+        err.message,
+        null,
+        false,
+      );
     }
   },
   notification: async (req, res) => {
@@ -81,6 +123,8 @@ export const proposalController = {
         isNaN(err.code) ? 500 : err.code,
         {},
         err.message,
+        null,
+        false,
         null,
         false,
       );
